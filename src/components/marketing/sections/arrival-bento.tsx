@@ -6,7 +6,7 @@ export function ArrivalBento() {
   return (
     <section
       id="services"
-      className="px-4 pb-6 md:px-6 md:pb-8"
+      className="px-4 py-6 md:px-6 md:pb-8"
     >
       <div className="grid gap-3 md:grid-cols-2 md:grid-rows-2 md:gap-4">
         <article className="relative min-h-[280px] overflow-hidden rounded-[1.6rem] bg-[#0b1524] p-7 text-white md:row-span-2 md:min-h-[520px] md:p-10">

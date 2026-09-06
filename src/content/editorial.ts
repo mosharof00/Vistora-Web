@@ -1,7 +1,7 @@
 export const editorial = {
-  kicker: "A JOURNEY, SHAPED FOR YOU",
-  title: "The moments between the tickets matter most.",
-  body: "Vistora pairs professional travel support with a dedicated consultant — shaping every visa, flight, hotel, and late-night arrival into one seamless journey.",
+  kicker: "A CITY, EDITED FOR YOU",
+  title: "The moments between the landmarks matter most.",
+  body: "Vistora pairs discreet local access with a dedicated consultant, shaping every arrival, table, street, and late-night discovery into one seamless journey.",
 } as const;
 
 export const arrivalBento = {

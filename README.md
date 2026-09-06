@@ -1,39 +1,38 @@
 # Vistora Web
 
-Marketing site for **Vistora Tours & Travels**.
+Marketing site + manpower ERP for **Vistora Tours & Travels**.
 
 Tagline: *Explore More, Travel Beyond*
-
-This repo is intentionally split so a public landing page can ship first, then an admin panel, auth, and a multi-role operations system can land without rewriting the app.
 
 ## Stack
 
 - Next.js (App Router) + TypeScript
 - Tailwind CSS v4
-- Framer Motion (UI + scroll-linked hero)
-- Supabase later (not wired yet)
+- Framer Motion
+- Supabase (Auth, Postgres, Storage)
 
 ## Develop
 
 ```bash
+cp .env.example .env.local
+# fill NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY
 npm install
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
 
-## What is in this pass
+## What is in place
 
-- Project structure for marketing now, auth/admin later
-- Brand and site constants (`src/config`)
-- Cinematic scroll hero (aircraft window → clouds → Eiffel Tower)
-- Editorial band + arrival bento, matching the reference sequence
-- CMS-shaped TypeScript types for destinations, tours, visas, inquiries
+- Cinematic marketing homepage
+- Full manpower schema on Supabase (candidates, passports, job orders, visa batches, process steps, documents/storage, HR attendance, BDT finance)
+- Auth spine: roles, middleware, `requireRole`, dashboard route stubs
+- Generated types: `src/types/database.types.ts`
 
-## What is not in this pass
+See `docs/DATABASE.md` and `docs/ARCHITECTURE.md`.
 
-- Full services / visa / tours pages
-- Inquiry form + WhatsApp number
-- Admin panel, auth, Supabase
+## Scripts
 
-See `docs/ARCHITECTURE.md` and `docs/REQUIREMENTS.md`.
+```bash
+npm run gen:types   # regenerate Database types (requires Supabase CLI + project id)
+```

@@ -34,7 +34,7 @@ export default function RootLayout({
       lang={siteConfig.locale}
       className={`${sans.variable} ${serif.variable} h-full antialiased`}
     >
-      <body className="min-h-full bg-[#070b14] font-sans text-white">
+      <body className="min-h-full bg-background font-sans text-foreground">
         {children}
       </body>
     </html>

@@ -1,19 +1,96 @@
 @import "tailwindcss";
 
-:root {
-  --background: #070b14;
-  --foreground: #f7f4ee;
-  --cream: #f3eee4;
-  --cyan: #00b4e6;
-}
+/*
+  Tokens map from src/config/brand.ts colors.
+  Change brand.colors / brand.fonts once — keep these in sync.
+*/
+
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-cream: var(--cream);
-  --color-cyan: var(--cyan);
   --font-sans: var(--font-geist-sans);
   --font-serif: var(--font-cormorant);
+  --font-heading: var(--font-geist-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-cream: var(--cream);
+  --color-cyan: var(--cyan);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+}
+
+:root {
+  /* Dashboard — light tint of logo blue; deep blue primary buttons */
+  --background: #eef5fb;
+  --foreground: #0b1f33;
+  --card: #ffffff;
+  --card-foreground: #0b1f33;
+  --popover: #ffffff;
+  --popover-foreground: #0b1f33;
+  --primary: #0b4f9c;
+  --primary-foreground: #f5faff;
+  --secondary: #d7e4f2;
+  --secondary-foreground: #0b1f33;
+  --muted: #d7e4f2;
+  --muted-foreground: #5a738c;
+  --accent: #cfe3f5;
+  --accent-foreground: #0b1f33;
+  --destructive: #b42318;
+  --border: #c9dae9;
+  --input: #c9dae9;
+  --ring: #1aa6e0;
+  --radius: 1rem;
+  --sidebar: #e4eef8;
+  --sidebar-foreground: #0b1f33;
+  --sidebar-primary: #0b4f9c;
+  --sidebar-primary-foreground: #f5faff;
+  --sidebar-accent: #cfe3f5;
+  --sidebar-accent-foreground: #0b1f33;
+  --sidebar-border: #c9dae9;
+  --sidebar-ring: #1aa6e0;
+  --cream: #f3eee4;
+  --cyan: #1aa6e0;
+}
+
+/* Marketing landing — dark cinematic surface */
+.marketing-dark {
+  --background: #070b14;
+  --foreground: #f7f4ee;
+  --card: #0b1524;
+  --card-foreground: #f7f4ee;
+  --primary: #1aa6e0;
+  --primary-foreground: #070b14;
+  --muted: #1a2740;
+  --muted-foreground: #c5d0dc;
+  --border: #1a2740;
+  --cream: #f3eee4;
+  --cyan: #00b4e6;
 }
 
 html {
@@ -33,6 +110,6 @@ body {
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--cyan) 40%, black);
-  color: white;
+  background: color-mix(in srgb, var(--cyan) 40%, white);
+  color: var(--foreground);
 }

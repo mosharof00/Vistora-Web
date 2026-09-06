@@ -1,60 +1,49 @@
 # Architecture
 
-Vistora is a **marketing site first**. Folders below are shaped so a company OS (roles, leads, packages, visas) can be added without moving the landing page.
+Vistora ships a **marketing site** plus a **manpower ERP** backend on Supabase.
 
 ```
 src/
   app/
-    (marketing)/     Public site. Current homepage lives here.
-    (auth)/          Future: login / invite / password reset
-    (dashboard)/     Future: admin + staff roles
-    api/             Future: Route Handlers (inquiries, webhooks)
-  components/
-    marketing/       Landing-only UI (hero, sections)
-    shared/          Logo, pieces used by marketing AND future app
-    ui/              Future primitives (button, input, dialog)
-  config/            App name, brand, nav — change once, reuse everywhere
-  content/           Static copy. Later replaced or hydrated from Supabase
-  lib/               Pure helpers
-  types/             CMS / lead shapes used by future admin
-  hooks/
-public/
-  brand/             Logo
-  hero/              Cinematic stills (licensed Unsplash, not the paid template)
+    (marketing)/     Public landing
+    (auth)/          login / unauthorized
+    (dashboard)/     /admin /staff /hr /office /candidate
+    auth/confirm/    Email / invite callback
+  lib/
+    auth/            roles, requireRole
+    supabase/        browser / server / middleware / admin clients
+    storage/         object path helpers
+  types/
+    database.types.ts  Generated from Supabase
+    cms.ts             Marketing CMS shapes (static until tables land)
+supabase/migrations/   Source of truth for schema
+docs/DATABASE.md       Schema overview
 ```
 
-## Config before components
+## Auth
 
-- `src/config/site.ts` — `APP_NAME`, legal name, tagline, contact, socials
-- `src/config/brand.ts` — colors, asset paths
-- `src/config/navigation.ts` — header / experience / footer links
+Same spine as Import Mark (login UI next):
 
-Do not hardcode “Vistora” in random files. Import from config.
+1. Supabase Auth user
+2. Role in `app_metadata.role` (`admin | staff | hr | office_assistant | candidate`)
+3. Profile row (`admins` / `employees` / `candidates`)
+4. Middleware session refresh + role path guards
+5. RLS: Admin-only write on agents/employer companies; staff write candidates/cases
 
-## Content vs CMS
+Agents and foreign employer companies are **records only** (no login).
 
-`src/content/*` is the stand-in for a CMS. Keep objects serializable (no React nodes) so they can move to Supabase tables later:
+## Dashboard UI
 
-- destinations
-- tour packages
-- visa products
-- reviews
-- inquiries (`New → Contacted → Processing → Completed → Cancelled`)
+Import Mark shell: sidebar + topbar + avatar menu.  
+Colors from logo via `src/config/brand.ts` → `globals.css` (light blue page, deep blue buttons).  
+Logo: `public/brand/vistora_logo.png`.
 
-Types already live in `src/types/cms.ts`.
+## Config
 
-## Hero
+- `src/config/site.ts` — app name, contact
+- `src/config/brand.ts` — name, logo paths, colors, fonts (change once)
+- Env: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`
 
-The header is an original scroll-scrubbed sequence inspired by the VELUNE motion language (window → descent → tower), with Vistora copy. It does not use HorizonX source files.
+## Out of scope (for now)
 
-Motion lives in `src/components/marketing/hero/`. Copy lives in `src/content/hero.ts`.
-
-## Route groups
-
-| Group | URL today | Later |
-|---|---|---|
-| `(marketing)` | `/` | `/tours`, `/visa`, `/about` |
-| `(auth)` | — | `/login` |
-| `(dashboard)` | — | `/admin`, `/staff` |
-
-Layouts stay separate so the cinematic landing never wraps the admin chrome.
+Tourist visa products and air-ticket trading. Schema is ready to extend later.

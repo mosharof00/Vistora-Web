@@ -5,14 +5,14 @@ export function ExperienceShell({ children }: { children: ReactNode }) {
     <div className="relative min-h-screen bg-[#050814]">
       <div
         aria-hidden
-        className="pointer-events-none fixed inset-0 opacity-50"
+        className="pointer-events-none fixed inset-0 opacity-40"
         style={{
           backgroundImage:
-            "radial-gradient(ellipse at 50% 20%, #1a2740 0%, #050814 58%), url(/hero/clouds-dark.jpg)",
+            "radial-gradient(ellipse at 50% 18%, #1a2740 0%, #050814 55%), url(/hero/film/05.jpg)",
           backgroundSize: "cover",
           backgroundPosition: "center",
-          filter: "blur(28px) brightness(0.28) saturate(0.7)",
-          transform: "scale(1.12)",
+          filter: "blur(34px) brightness(0.25) saturate(0.65)",
+          transform: "scale(1.15)",
         }}
       />
       <div className="relative pb-3">{children}</div>

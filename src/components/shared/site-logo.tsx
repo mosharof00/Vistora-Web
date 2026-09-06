@@ -17,7 +17,7 @@ export function SiteLogo({
   return (
     <span className={cn("inline-flex items-center gap-2.5", className)}>
       <Image
-        src={brand.assets.logo}
+        src={brand.logoIcon}
         alt=""
         width={36}
         height={36}

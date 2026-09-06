@@ -4,7 +4,7 @@ export function EditorialBand() {
   return (
     <section
       id="about"
-      className="px-6 py-16 text-zinc-900 md:px-12 md:py-24"
+      className="bg-[#f3eee4] px-6 py-16 text-zinc-900 md:px-12 md:py-24"
     >
       <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
         <p className="text-[11px] tracking-[0.28em] text-zinc-500 uppercase">

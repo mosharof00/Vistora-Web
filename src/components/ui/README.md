@@ -1,1 +1,5 @@
-# Shared UI primitives (button, input, dialog) will land here as the site grows.
+# UI primitives
+
+Button, Avatar, Badge, DropdownMenu — Import Mark style, Vistora tokens.
+
+Dashboard chrome lives in `src/components/layout/`.

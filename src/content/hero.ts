@@ -12,13 +12,14 @@ export type HeroChapter = {
   };
 };
 
+/** Chapter copy + timing aligned to screenshots 1–9 / VELUNE beat sheet. */
 export const heroChapters: HeroChapter[] = [
   {
     id: "home",
     index: 0,
     coords: "PARIS  /  48.8566° N",
-    title: "The journey begins before you land.",
-    body: "Air tickets, visas, and work permits — arranged before you leave the ground.",
+    title: "Paris begins before you land.",
+    body: "Private arrivals, after-dark tables, and the city revealed at your pace.",
     align: "center",
     cta: { label: "Begin the descent", target: "next" },
   },
@@ -26,8 +27,8 @@ export const heroChapters: HeroChapter[] = [
     id: "threshold",
     index: 1,
     kicker: "01  —  THE THRESHOLD",
-    title: "Leave the paperwork behind.",
-    body: "We choreograph the quiet details between enquiry and departure.",
+    title: "Leave the itinerary behind.",
+    body: "We choreograph the quiet details between arrival and discovery.",
     align: "left",
   },
   {
@@ -35,7 +36,7 @@ export const heroChapters: HeroChapter[] = [
     index: 2,
     kicker: "02  —  BETWEEN WORLDS",
     title: "The city waits beneath the clouds.",
-    body: "No queues at our desk. No guesswork. A journey shaped around how you want to arrive.",
+    body: "No queues. No templates. Just a Paris shaped around how you want to feel.",
     align: "left",
   },
   {
