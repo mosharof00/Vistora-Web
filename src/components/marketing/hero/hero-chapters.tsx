@@ -6,9 +6,9 @@ import { heroChapters, type HeroChapter } from "@/content/hero";
 import { cn } from "@/lib/utils";
 
 /** Fade in / hold / fade out windows per chapter (HorizonX pacing). */
-/** [enterStart, fullyVisible, holdEnd, exitEnd] — departure stays fully on at scroll 0. */
+/** [enterStart, fullyVisible, holdEnd, exitEnd] — departure fully on at scroll 0. */
 const ranges: Record<string, [number, number, number, number]> = {
-  departure: [0, 0, 0.12, 0.18],
+  departure: [-0.01, 0, 0.12, 0.18],
   threshold: [0.14, 0.2, 0.3, 0.36],
   between: [0.32, 0.38, 0.48, 0.54],
   "first-light": [0.5, 0.56, 0.66, 0.72],
@@ -20,7 +20,7 @@ function chapterOpacity(
   [a, b, c, d]: [number, number, number, number],
 ) {
   if (progress < a || progress >= d) return 0;
-  if (b > a && progress < b) return (progress - a) / (b - a);
+  if (progress < b) return (progress - a) / (b - a);
   if (progress <= c) return 1;
   return 1 - (progress - c) / (d - c);
 }

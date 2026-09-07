@@ -13,32 +13,30 @@ import { HeroChrome } from "@/components/marketing/hero/hero-chrome";
 import { HeroChapters } from "@/components/marketing/hero/hero-chapters";
 import { HeroEditorialReveal } from "@/components/marketing/hero/hero-editorial-reveal";
 import { HeroProgress } from "@/components/marketing/hero/hero-progress";
+import type { MarketingAccount } from "@/components/marketing/account-menu";
 import { heroChrome } from "@/content/hero";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 import { chapterIndexFromProgress, heroScrollHeight } from "@/lib/motion";
 
-/**
- * Top pill / menu targets — intentional jumps only.
- * Active state is set by click, not by film scroll.
- */
 const navTargets: Record<string, number | string> = {
   home: 0,
-  journey: 0.34,
-  arrival: 0.7,
-  services: "#services",
   about: "#about",
-  tours: "#services",
-  visa: "#services",
+  services: "#services",
+  tours: "#tours",
+  visa: "#visa",
   contact: "#contact",
 };
 
-export function CinematicHero() {
+type CinematicHeroProps = {
+  account: MarketingAccount | null;
+};
+
+export function CinematicHero({ account }: CinematicHeroProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const compact = useMediaQuery("(max-width: 768px)");
   const reduced = usePrefersReducedMotion();
   const [chapter, setChapter] = useState(0);
-  const [menuOpen, setMenuOpen] = useState(false);
   const [activeId, setActiveId] = useState("home");
 
   const { scrollYProgress } = useScroll({
@@ -66,7 +64,6 @@ export function CinematicHero() {
   }
 
   function onNavigate(id: string) {
-    setMenuOpen(false);
     setActiveId(id);
     const target = navTargets[id];
     if (typeof target === "number") {
@@ -105,8 +102,7 @@ export function CinematicHero() {
         <div className="absolute inset-0 bg-black/45" />
         <HeroChrome
           activeId={activeId}
-          menuOpen={menuOpen}
-          onToggleMenu={() => setMenuOpen((open) => !open)}
+          account={account}
           onNavigate={onNavigate}
         />
         <div className="absolute top-[28%] left-1/2 z-20 w-[min(calc(100%-2.5rem),36rem)] -translate-x-1/2 text-center">
@@ -138,8 +134,7 @@ export function CinematicHero() {
         <motion.div className="absolute inset-0 z-20" style={{ opacity: chromeFade }}>
           <HeroChrome
             activeId={activeId}
-            menuOpen={menuOpen}
-            onToggleMenu={() => setMenuOpen((open) => !open)}
+            account={account}
             onNavigate={onNavigate}
           />
           <HeroChapters

@@ -8,7 +8,7 @@ export function ExperienceShell({ children }: { children: ReactNode }) {
         className="pointer-events-none fixed inset-0 opacity-40"
         style={{
           backgroundImage:
-            "radial-gradient(ellipse at 50% 18%, #1a2740 0%, #050814 55%), url(/hero/film/05.jpg)",
+            "radial-gradient(ellipse at 50% 18%, #1a2740 0%, #050814 55%), url(/hero/sequence/ezgif-frame-110.jpg)",
           backgroundSize: "cover",
           backgroundPosition: "center",
           filter: "blur(34px) brightness(0.25) saturate(0.65)",

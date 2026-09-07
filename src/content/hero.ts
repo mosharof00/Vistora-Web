@@ -64,7 +64,5 @@ export const heroChapters: HeroChapter[] = [
 
 export const heroChrome = {
   scrollHint: "SCROLL TO DESCEND",
-  openMenu: "Open menu",
-  closeMenu: "Close menu",
   lastChapter: 4,
 } as const;

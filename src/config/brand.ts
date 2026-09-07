@@ -11,9 +11,9 @@ export const brand = {
     "Manpower recruitment and travel support — from demand letter to deployment.",
 
   /** Square mark (sidebar / header). */
-  logoIcon: "/brand/vistora_logo.png",
+  logoIcon: "/brand/logo.png",
   /** Same mark used full-width on auth until a wordmark exists. */
-  logoFull: "/brand/vistora_logo.png",
+  logoFull: "/brand/vistora_full_logo.png",
   favicon: "/brand/vistora_logo.png",
 
   /**
@@ -64,14 +64,13 @@ export const brand = {
   },
 
   assets: {
+    /** Marketing stills pulled from the live Paris scroll sequence. */
     hero: {
-      window: "/hero/plane-travel.jpg",
-      cloudsWing: "/hero/window.jpg",
-      cloudsDark: "/hero/clouds-dark.jpg",
-      sky: "/hero/sky-stars.jpg",
-      eiffelNight: "/hero/eiffel-night.jpg",
-      eiffelPeak: "/hero/eiffel-night.jpg",
-      parisDusk: "/hero/paris-dusk.jpg",
+      frameStart: "/hero/sequence/ezgif-frame-001.jpg",
+      frameWing: "/hero/sequence/ezgif-frame-060.jpg",
+      frameClouds: "/hero/sequence/ezgif-frame-110.jpg",
+      frameNight: "/hero/sequence/ezgif-frame-160.jpg",
+      frameArrival: "/hero/sequence/ezgif-frame-219.jpg",
     },
   },
 

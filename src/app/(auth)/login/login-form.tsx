@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 
 import { login } from "@/app/(auth)/actions";
@@ -38,6 +39,7 @@ export function LoginForm({
 }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
@@ -111,11 +113,29 @@ export function LoginForm({
                     </Link>
                   </div>
                   <FormControl>
-                    <Input
-                      type="password"
-                      autoComplete="current-password"
-                      {...field}
-                    />
+                    <div className="relative">
+                      <Input
+                        type={showPassword ? "text" : "password"}
+                        autoComplete="current-password"
+                        className="pr-10"
+                        {...field}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword((v) => !v)}
+                        className="absolute top-1/2 right-2.5 -translate-y-1/2 rounded-md p-1 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        aria-label={
+                          showPassword ? "Hide password" : "Show password"
+                        }
+                        aria-pressed={showPassword}
+                      >
+                        {showPassword ? (
+                          <EyeOff className="size-4" />
+                        ) : (
+                          <Eye className="size-4" />
+                        )}
+                      </button>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -128,11 +148,10 @@ export function LoginForm({
         </Form>
 
         <p className="mt-4 text-center text-sm text-muted-foreground">
-          Candidate?{" "}
+          New here?{" "}
           <Link href="/signup" className="text-foreground hover:underline">
             Create an account
           </Link>
-          . Staff and office accounts are invited by admin.
         </p>
       </CardContent>
     </Card>

@@ -1,14 +1,14 @@
 export const editorial = {
-  kicker: "A CITY, EDITED FOR YOU",
-  title: "The moments between the landmarks matter most.",
-  body: "Vistora pairs discreet local access with a dedicated consultant, shaping every arrival, table, street, and late-night discovery into one seamless journey.",
+  kicker: "FROM DHAKA TO EVERYWHERE",
+  title: "Tickets, visas, and work permits — handled before you fly.",
+  body: "Vistora keeps one consultant on your file so air tickets, embassies, and departure plans stay coordinated — not scattered across chats.",
 } as const;
 
 export const arrivalBento = {
   night: {
     kicker: "AFTER DARK",
-    title: "Paris after hours",
-    body: "Work permits, Umrah, and the city at your pace — we handle the path so you can keep the evening.",
+    title: "Travel after hours",
+    body: "Work permits, Umrah, and late-night flights — we handle the path so you can keep moving.",
   },
   arrival: {
     kicker: "EFFORTLESS ARRIVAL",
