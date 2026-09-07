@@ -3,6 +3,7 @@ export type HeroChapter = {
   index: number;
   kicker?: string;
   coords?: string;
+  /** Use \\n for HorizonX-style editorial line breaks. */
   title: string;
   body?: string;
   align: "center" | "left" | "right";
@@ -12,14 +13,17 @@ export type HeroChapter = {
   };
 };
 
-/** Chapter copy + timing aligned to screenshots 1–9 / VELUNE beat sheet. */
+/**
+ * Five story beats over the Paris film —
+ * align: center → left → left → right → left (HorizonX pattern).
+ */
 export const heroChapters: HeroChapter[] = [
   {
-    id: "home",
+    id: "departure",
     index: 0,
     coords: "PARIS  /  48.8566° N",
     title: "Paris begins before you land.",
-    body: "Private arrivals, after-dark tables, and the city revealed at your pace.",
+    body: "Air tickets, visas, and work permits — arranged by Vistora before you leave the ground.",
     align: "center",
     cta: { label: "Begin the descent", target: "next" },
   },
@@ -27,16 +31,16 @@ export const heroChapters: HeroChapter[] = [
     id: "threshold",
     index: 1,
     kicker: "01  —  THE THRESHOLD",
-    title: "Leave the itinerary behind.",
-    body: "We choreograph the quiet details between arrival and discovery.",
+    title: "Leave the paperwork\nbehind.",
+    body: "We handle the quiet details between enquiry, visa, and departure.",
     align: "left",
   },
   {
     id: "between",
     index: 2,
     kicker: "02  —  BETWEEN WORLDS",
-    title: "The city waits beneath the clouds.",
-    body: "No queues. No templates. Just a Paris shaped around how you want to feel.",
+    title: "The city waits\nbeneath\nthe clouds.",
+    body: "No guesswork. A Paris journey shaped around how you want to arrive.",
     align: "left",
   },
   {
@@ -44,14 +48,15 @@ export const heroChapters: HeroChapter[] = [
     index: 3,
     kicker: "03  —  FIRST LIGHT",
     title: "Paris, revealed.",
+    body: "One partner for tickets, visas, tours, and the permit that opens the door.",
     align: "right",
   },
   {
-    id: "arrival",
+    id: "destination",
     index: 4,
-    kicker: "04  —  YOUR ARRIVAL",
-    title: "Arrive beyond the ordinary.",
-    body: "One city. Entirely yours.",
+    kicker: "04  —  YOUR DESTINATION",
+    title: "Explore more.\nTravel beyond.",
+    body: "From the first enquiry to the lights below — Vistora stays with the journey.",
     align: "left",
     cta: { label: "Plan with Vistora", target: "services" },
   },

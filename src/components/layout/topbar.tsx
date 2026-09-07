@@ -15,6 +15,10 @@ const ROLE_LABEL: Record<UserRole, string> = {
   candidate: "Candidate",
 };
 
+/**
+ * Top bar above role content. Mobile: hamburger toggles Import Mark-style drawer.
+ * Background matches the page canvas; light bottom shadow only.
+ */
 export function Topbar({
   role,
   displayName,
@@ -35,7 +39,7 @@ export function Topbar({
   const roleLabel = ROLE_LABEL[role];
 
   return (
-    <header className="flex h-14 shrink-0 items-center justify-between border-b px-4">
+    <header className="relative z-20 flex h-14 shrink-0 items-center justify-between bg-background px-4 shadow-[0_1px_0_0_rgba(3,4,94,0.08),0_4px_10px_-6px_rgba(3,4,94,0.12)]">
       <div className="flex min-w-0 items-center gap-3">
         <Button
           type="button"

@@ -8,7 +8,6 @@ import {
   useScroll,
   useTransform,
 } from "framer-motion";
-import { AirplaneWindow } from "@/components/marketing/hero/airplane-window";
 import { HeroCanvas } from "@/components/marketing/hero/hero-canvas";
 import { HeroChrome } from "@/components/marketing/hero/hero-chrome";
 import { HeroChapters } from "@/components/marketing/hero/hero-chapters";
@@ -19,10 +18,14 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 import { chapterIndexFromProgress, heroScrollHeight } from "@/lib/motion";
 
+/**
+ * Top pill / menu targets — intentional jumps only.
+ * Active state is set by click, not by film scroll.
+ */
 const navTargets: Record<string, number | string> = {
   home: 0,
-  journey: 0.4,
-  arrival: 0.78,
+  journey: 0.34,
+  arrival: 0.7,
   services: "#services",
   about: "#about",
   tours: "#services",
@@ -48,9 +51,6 @@ export function CinematicHero() {
 
   useMotionValueEvent(scrollYProgress, "change", (value) => {
     setChapter(chapterIndexFromProgress(value));
-    if (value < 0.18) setActiveId("home");
-    else if (value < 0.72) setActiveId("journey");
-    else setActiveId("arrival");
   });
 
   function scrollToProgress(target: number) {
@@ -67,6 +67,7 @@ export function CinematicHero() {
 
   function onNavigate(id: string) {
     setMenuOpen(false);
+    setActiveId(id);
     const target = navTargets[id];
     if (typeof target === "number") {
       scrollToProgress(target);
@@ -76,37 +77,49 @@ export function CinematicHero() {
   }
 
   function onCta(target: "next" | "services") {
-    if (target === "next") scrollToProgress(0.18);
-    else scrollToSelector("#services");
+    if (target === "next") {
+      scrollToProgress(0.18);
+      return;
+    }
+    setActiveId("services");
+    scrollToSelector("#services");
   }
+
+  const stageClass = compact
+    ? "sticky top-2 mx-2 h-[calc(100svh-1rem)] overflow-hidden rounded-[1.25rem] bg-[#050814] shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
+    : "sticky top-3 mx-3 h-[calc(100svh-1.5rem)] overflow-hidden rounded-[1.75rem] bg-[#050814] shadow-[0_24px_80px_rgba(0,0,0,0.5)]";
 
   if (reduced) {
     return (
       <section
         id="home"
-        className="relative mx-3 mt-3 h-[calc(100svh-1.5rem)] min-h-[640px] overflow-hidden rounded-[1.75rem] bg-[#050814]"
+        className={`relative ${compact ? "mx-2 mt-2" : "mx-3 mt-3"} h-[calc(100svh-1rem)] min-h-[560px] overflow-hidden rounded-[1.25rem] bg-[#050814] md:rounded-[1.75rem]`}
       >
         <Image
-          src="/hero/film/08.jpg"
-          alt="Paris arrival"
+          src="/hero/sequence/ezgif-frame-219.jpg"
+          alt="Paris at night — Eiffel Tower above the clouds"
           fill
           priority
           className="object-cover"
         />
         <div className="absolute inset-0 bg-black/45" />
         <HeroChrome
-          activeId="home"
+          activeId={activeId}
           menuOpen={menuOpen}
           onToggleMenu={() => setMenuOpen((open) => !open)}
           onNavigate={onNavigate}
         />
-        <div className="absolute inset-x-6 top-[30%] z-20 max-w-2xl text-center md:inset-x-12">
+        <div className="absolute top-[28%] left-1/2 z-20 w-[min(calc(100%-2.5rem),36rem)] -translate-x-1/2 text-center">
           <p className="mb-5 text-[11px] tracking-[0.28em] text-white/70">
             PARIS  /  48.8566° N
           </p>
-          <h1 className="text-[clamp(2rem,5vw,4rem)] font-medium tracking-tight text-white">
+          <h1 className="text-[clamp(1.85rem,5vw,4rem)] font-medium tracking-tight text-white">
             Paris begins before you land.
           </h1>
+          <p className="mx-auto mt-4 max-w-md text-sm text-white/80 md:text-base">
+            Air tickets, visas, and work permits — arranged by Vistora before
+            you leave the ground.
+          </p>
         </div>
       </section>
     );
@@ -117,11 +130,10 @@ export function CinematicHero() {
       id="home"
       ref={containerRef}
       className="relative"
-      style={{ height: heroScrollHeight }}
+      style={{ height: compact ? "560vh" : heroScrollHeight }}
     >
-      <div className="sticky top-3 mx-3 h-[calc(100svh-1.5rem)] overflow-hidden rounded-[1.75rem] bg-[#050814] shadow-[0_24px_80px_rgba(0,0,0,0.5)]">
+      <div className={stageClass}>
         <HeroCanvas progress={scrollYProgress} />
-        <AirplaneWindow progress={scrollYProgress} compact={compact} />
 
         <motion.div className="absolute inset-0 z-20" style={{ opacity: chromeFade }}>
           <HeroChrome
@@ -130,10 +142,14 @@ export function CinematicHero() {
             onToggleMenu={() => setMenuOpen((open) => !open)}
             onNavigate={onNavigate}
           />
-          <HeroChapters progress={scrollYProgress} onCta={onCta} />
+          <HeroChapters
+            progress={scrollYProgress}
+            onCta={onCta}
+            compact={compact}
+          />
           <HeroProgress progress={scrollYProgress} chapter={chapter} />
           <motion.div
-            className="pointer-events-none absolute right-7 bottom-14 z-30 hidden flex-col items-center gap-3 md:flex"
+            className="pointer-events-none absolute right-5 bottom-12 z-30 hidden flex-col items-center gap-3 sm:right-7 sm:bottom-14 md:flex"
             style={{ opacity: hintOpacity }}
           >
             <span

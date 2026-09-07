@@ -15,7 +15,12 @@ export type NavIcon =
   | "salary"
   | "employees"
   | "documents"
-  | "reports";
+  | "reports"
+  | "categories"
+  | "currencies"
+  | "fees"
+  | "expenses"
+  | "commissions";
 
 export type NavItem = {
   label: string;
@@ -23,46 +28,95 @@ export type NavItem = {
   icon: NavIcon;
 };
 
-/** Manpower-first navigation per role. */
-export const NAV_BY_ROLE: Record<UserRole, NavItem[]> = {
+export type NavGroup = {
+  id: string;
+  label: string;
+  items: NavItem[];
+};
+
+export type NavEntry = NavItem | NavGroup;
+
+export function isNavGroup(entry: NavEntry): entry is NavGroup {
+  return "items" in entry;
+}
+
+/** Flat links for roles with short menus (or helpers). */
+export function flattenNav(entries: NavEntry[]): NavItem[] {
+  return entries.flatMap((entry) => (isNavGroup(entry) ? entry.items : [entry]));
+}
+
+function item(
+  label: string,
+  href: string,
+  icon: NavIcon
+): NavItem {
+  return { label, href, icon };
+}
+
+function group(id: string, label: string, items: NavItem[]): NavGroup {
+  return { id, label, items };
+}
+
+/**
+ * Manpower-first navigation per role.
+ * Admin uses collapsible groups; other roles stay flat.
+ */
+export const NAV_BY_ROLE: Record<UserRole, NavEntry[]> = {
   admin: [
-    { label: "Dashboard", href: "/admin", icon: "dashboard" },
-    { label: "Employer Companies", href: "/admin/companies", icon: "companies" },
-    { label: "Agents", href: "/admin/agents", icon: "agents" },
-    { label: "Candidates", href: "/admin/candidates", icon: "candidates" },
-    { label: "Job Orders", href: "/admin/job-orders", icon: "orders" },
-    { label: "Visa Batches", href: "/admin/visa-batches", icon: "batches" },
-    { label: "Cases", href: "/admin/cases", icon: "cases" },
-    { label: "Payments", href: "/admin/payments", icon: "payments" },
-    { label: "Company Payments", href: "/admin/company-payments", icon: "payments" },
-    { label: "Payment Gateways", href: "/admin/payment-gateways", icon: "gateways" },
-    { label: "Employees", href: "/admin/employees", icon: "employees" },
-    { label: "Reports", href: "/admin/reports", icon: "reports" },
+    item("Dashboard", "/admin", "dashboard"),
+    group("directory", "Directory", [
+      item("Employer Companies", "/admin/companies", "companies"),
+      item("Agents", "/admin/agents", "agents"),
+      item("Candidates", "/admin/candidates", "candidates"),
+      item("Employees", "/admin/employees", "employees"),
+    ]),
+    group("manpower", "Manpower", [
+      item("Job Categories", "/admin/job-categories", "categories"),
+      item("Job Orders", "/admin/job-orders", "orders"),
+      item("Visa Batches", "/admin/visa-batches", "batches"),
+      item("Cases", "/admin/cases", "cases"),
+      item("Documents", "/admin/documents", "documents"),
+    ]),
+    group("finance", "Finance", [
+      item("Fee Schedules", "/admin/fee-schedules", "fees"),
+      item("Payments", "/admin/payments", "payments"),
+      item("Company Payments", "/admin/company-payments", "payments"),
+      item("Payment Gateways", "/admin/payment-gateways", "gateways"),
+      item("Currencies", "/admin/currencies", "currencies"),
+      item("Expenses", "/admin/expenses", "expenses"),
+      item("Agent Commissions", "/admin/commissions", "commissions"),
+    ]),
+    group("hr", "HR", [
+      item("Attendance", "/admin/attendance", "attendance"),
+      item("Leave", "/admin/leave", "leave"),
+      item("Salary", "/admin/salary", "salary"),
+    ]),
+    item("Reports", "/admin/reports", "reports"),
   ],
   staff: [
-    { label: "Dashboard", href: "/staff", icon: "dashboard" },
-    { label: "Candidates", href: "/staff/candidates", icon: "candidates" },
-    { label: "Job Orders", href: "/staff/job-orders", icon: "orders" },
-    { label: "Visa Batches", href: "/staff/visa-batches", icon: "batches" },
-    { label: "Cases", href: "/staff/cases", icon: "cases" },
-    { label: "Documents", href: "/staff/documents", icon: "documents" },
-    { label: "Payments", href: "/staff/payments", icon: "payments" },
+    item("Dashboard", "/staff", "dashboard"),
+    item("Candidates", "/staff/candidates", "candidates"),
+    item("Job Orders", "/staff/job-orders", "orders"),
+    item("Visa Batches", "/staff/visa-batches", "batches"),
+    item("Cases", "/staff/cases", "cases"),
+    item("Documents", "/staff/documents", "documents"),
+    item("Payments", "/staff/payments", "payments"),
   ],
   hr: [
-    { label: "Dashboard", href: "/hr", icon: "dashboard" },
-    { label: "Employees", href: "/hr/employees", icon: "employees" },
-    { label: "Attendance", href: "/hr/attendance", icon: "attendance" },
-    { label: "Leave", href: "/hr/leave", icon: "leave" },
-    { label: "Salary", href: "/hr/salary", icon: "salary" },
+    item("Dashboard", "/hr", "dashboard"),
+    item("Employees", "/hr/employees", "employees"),
+    item("Attendance", "/hr/attendance", "attendance"),
+    item("Leave", "/hr/leave", "leave"),
+    item("Salary", "/hr/salary", "salary"),
   ],
   office_assistant: [
-    { label: "Dashboard", href: "/office", icon: "dashboard" },
-    { label: "Attendance", href: "/office/attendance", icon: "attendance" },
+    item("Dashboard", "/office", "dashboard"),
+    item("Attendance", "/office/attendance", "attendance"),
   ],
   candidate: [
-    { label: "Dashboard", href: "/candidate", icon: "dashboard" },
-    { label: "My Case", href: "/candidate/case", icon: "cases" },
-    { label: "Documents", href: "/candidate/documents", icon: "documents" },
-    { label: "Payments", href: "/candidate/payments", icon: "payments" },
+    item("Dashboard", "/candidate", "dashboard"),
+    item("My Case", "/candidate/case", "cases"),
+    item("Documents", "/candidate/documents", "documents"),
+    item("Payments", "/candidate/payments", "payments"),
   ],
 };

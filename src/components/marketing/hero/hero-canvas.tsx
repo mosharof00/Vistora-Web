@@ -1,33 +1,41 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { MotionValue } from "framer-motion";
 import { useMotionValueEvent } from "framer-motion";
-import { filmFrames, progressToFrameIndex } from "@/lib/hero-sequence";
+import {
+  progressToFrameIndex,
+  sequenceFrames,
+  SEQUENCE_FRAME_COUNT,
+} from "@/lib/hero-sequence";
 
 type HeroCanvasProps = {
   progress: MotionValue<number>;
 };
 
 /**
- * Scroll-scrubbed film: crossfades consecutive frames so the camera path
- * feels continuous (video-like), matching the HorizonX VELUNE technique.
+ * Scroll-scrubbed image sequence (HorizonX / VELUNE technique).
+ * Draws the nearest frame for each scroll position — feels like video playback.
  */
 export function HeroCanvas({ progress }: HeroCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const imagesRef = useRef<(HTMLImageElement | null)[]>([]);
+  const imagesRef = useRef<(HTMLImageElement | null)[]>(
+    Array.from({ length: SEQUENCE_FRAME_COUNT }, () => null),
+  );
   const sizeRef = useRef({ width: 0, height: 0, dpr: 1 });
+  const [loaded, setLoaded] = useState(0);
   const readyRef = useRef(false);
   const rafRef = useRef(0);
+  const lastFrameRef = useRef(-1);
 
   function drawCover(
     ctx: CanvasRenderingContext2D,
     img: HTMLImageElement,
     width: number,
     height: number,
-    scale = 1,
-    offsetY = 0,
   ) {
+    // Slight overscan crops Hailuo/Minimax watermarks in the corner
+    const scale = 1.06;
     const imgRatio = img.width / img.height;
     const canvasRatio = width / height;
     let drawW: number;
@@ -40,7 +48,7 @@ export function HeroCanvas({ progress }: HeroCanvasProps) {
       drawH = drawW / imgRatio;
     }
     const x = (width - drawW) / 2;
-    const y = (height - drawH) / 2 + offsetY;
+    const y = (height - drawH) / 2 - height * 0.01;
     ctx.drawImage(img, x, y, drawW, drawH);
   }
 
@@ -53,71 +61,104 @@ export function HeroCanvas({ progress }: HeroCanvasProps) {
     const { width, height, dpr } = sizeRef.current;
     if (!width || !height) return;
 
+    const floatIndex = progressToFrameIndex(value);
+    const index = Math.round(floatIndex);
+    if (index === lastFrameRef.current && loaded > 0) {
+      // still redraw on resize; allow fallthrough when size changed
+    }
+    lastFrameRef.current = index;
+
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.fillStyle = "#050814";
     ctx.fillRect(0, 0, width, height);
 
-    const floatIndex = progressToFrameIndex(value);
-    const i0 = Math.floor(floatIndex);
-    const i1 = Math.min(filmFrames.length - 1, i0 + 1);
-    const mix = floatIndex - i0;
-
-    const img0 = imagesRef.current[i0];
-    const img1 = imagesRef.current[i1];
-
-    // Continuous push-in (camera descending) + crop baked UI chrome from screenshots
-    const push = 1.14 + value * 0.1;
-    const driftY = value * -height * 0.035;
-
-    if (img0?.complete && img0.naturalWidth) {
+    const img = imagesRef.current[index];
+    if (img?.complete && img.naturalWidth) {
       ctx.globalAlpha = 1;
-      drawCover(ctx, img0, width, height, push, driftY);
+      drawCover(ctx, img, width, height);
+    } else {
+      // Prefer nearest loaded neighbor so scrub never blanks
+      for (let d = 1; d < 12; d += 1) {
+        const a = imagesRef.current[index - d];
+        const b = imagesRef.current[index + d];
+        if (a?.complete && a.naturalWidth) {
+          drawCover(ctx, a, width, height);
+          break;
+        }
+        if (b?.complete && b.naturalWidth) {
+          drawCover(ctx, b, width, height);
+          break;
+        }
+      }
     }
 
-    if (mix > 0.001 && img1?.complete && img1.naturalWidth && i1 !== i0) {
-      ctx.globalAlpha = mix;
-      drawCover(ctx, img1, width, height, push + mix * 0.02, driftY);
-      ctx.globalAlpha = 1;
-    }
-
-    // Soft atmospheric vignette (VELUNE night grade)
+    // Soft vignette for text readability
     const vignette = ctx.createRadialGradient(
       width / 2,
       height / 2,
-      Math.min(width, height) * 0.25,
+      Math.min(width, height) * 0.28,
       width / 2,
       height / 2,
-      Math.max(width, height) * 0.72,
+      Math.max(width, height) * 0.75,
     );
     vignette.addColorStop(0, "rgba(0,0,0,0)");
-    vignette.addColorStop(1, "rgba(3,6,12,0.45)");
+    vignette.addColorStop(1, "rgba(3,6,12,0.42)");
     ctx.fillStyle = vignette;
     ctx.fillRect(0, 0, width, height);
   }
 
   useEffect(() => {
     let cancelled = false;
-    imagesRef.current = filmFrames.map(() => null);
+    let completed = 0;
 
-    Promise.all(
-      filmFrames.map(
-        (src, index) =>
-          new Promise<void>((resolve) => {
-            const img = new Image();
-            img.decoding = "async";
-            img.onload = () => {
-              if (!cancelled) imagesRef.current[index] = img;
-              resolve();
-            };
-            img.onerror = () => resolve();
-            img.src = src;
-          }),
-      ),
-    ).then(() => {
-      if (cancelled) return;
+    // Priority: first, last, then the rest in batches so first paint is fast
+    const order = [
+      0,
+      SEQUENCE_FRAME_COUNT - 1,
+      ...Array.from({ length: SEQUENCE_FRAME_COUNT - 2 }, (_, i) => i + 1),
+    ];
+
+    const loadOne = (index: number) =>
+      new Promise<void>((resolve) => {
+        if (cancelled) {
+          resolve();
+          return;
+        }
+        const img = new Image();
+        img.decoding = "async";
+        img.onload = () => {
+          if (!cancelled) {
+            imagesRef.current[index] = img;
+            completed += 1;
+            setLoaded(completed);
+            if (completed === 2 || completed === SEQUENCE_FRAME_COUNT) {
+              readyRef.current = true;
+              paint(progress.get());
+            } else if (completed % 24 === 0) {
+              paint(progress.get());
+            }
+          }
+          resolve();
+        };
+        img.onerror = () => resolve();
+        img.src = sequenceFrames[index];
+      });
+
+    (async () => {
+      // Load first + last immediately
+      await Promise.all([loadOne(order[0]), loadOne(order[1])]);
       readyRef.current = true;
       paint(progress.get());
-    });
+
+      // Then stream the middle frames in chunks
+      const rest = order.slice(2);
+      const chunk = 18;
+      for (let i = 0; i < rest.length; i += chunk) {
+        if (cancelled) return;
+        await Promise.all(rest.slice(i, i + chunk).map(loadOne));
+        paint(progress.get());
+      }
+    })();
 
     const resize = () => {
       const canvas = canvasRef.current;
@@ -130,6 +171,7 @@ export function HeroCanvas({ progress }: HeroCanvasProps) {
       canvas.height = Math.floor(height * dpr);
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
+      lastFrameRef.current = -1;
       paint(progress.get());
     };
 
@@ -148,11 +190,20 @@ export function HeroCanvas({ progress }: HeroCanvasProps) {
     rafRef.current = requestAnimationFrame(() => paint(value));
   });
 
+  const readyPct = Math.round((loaded / SEQUENCE_FRAME_COUNT) * 100);
+
   return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 h-full w-full"
-      aria-hidden
-    />
+    <>
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 h-full w-full"
+        aria-hidden
+      />
+      {loaded < SEQUENCE_FRAME_COUNT ? (
+        <div className="pointer-events-none absolute bottom-8 left-1/2 z-[5] -translate-x-1/2 rounded-full bg-black/40 px-3 py-1 text-[10px] tracking-[0.18em] text-white/70 uppercase backdrop-blur-sm md:bottom-10">
+          Loading journey {readyPct}%
+        </div>
+      ) : null}
+    </>
   );
 }

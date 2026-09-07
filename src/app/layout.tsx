@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Cormorant_Garamond, Geist } from "next/font/google";
+import { Toaster } from "sonner";
 import { siteConfig } from "@/config/site";
 import "./globals.css";
 
@@ -36,6 +37,7 @@ export default function RootLayout({
     >
       <body className="min-h-full bg-background font-sans text-foreground">
         {children}
+        <Toaster richColors position="top-center" />
       </body>
     </html>
   );

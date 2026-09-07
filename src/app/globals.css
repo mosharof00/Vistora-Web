@@ -46,36 +46,36 @@
 }
 
 :root {
-  /* Dashboard — light tint of logo blue; deep blue primary buttons */
-  --background: #eef5fb;
-  --foreground: #0b1f33;
+  /* Deeper canvas + deeper sidebar; selected = primary #03045e */
+  --background: #dde2ee;
+  --foreground: #0b1026;
   --card: #ffffff;
-  --card-foreground: #0b1f33;
+  --card-foreground: #0b1026;
   --popover: #ffffff;
-  --popover-foreground: #0b1f33;
-  --primary: #0b4f9c;
-  --primary-foreground: #f5faff;
-  --secondary: #d7e4f2;
-  --secondary-foreground: #0b1f33;
-  --muted: #d7e4f2;
-  --muted-foreground: #5a738c;
-  --accent: #cfe3f5;
-  --accent-foreground: #0b1f33;
+  --popover-foreground: #0b1026;
+  --primary: #03045e;
+  --primary-foreground: #f8f9ff;
+  --secondary: #cfd5e4;
+  --secondary-foreground: #0b1026;
+  --muted: #cfd5e4;
+  --muted-foreground: #5c647a;
+  --accent: #b8c2d9;
+  --accent-foreground: #03045e;
   --destructive: #b42318;
-  --border: #c9dae9;
-  --input: #c9dae9;
-  --ring: #1aa6e0;
+  --border: #b8c0d4;
+  --input: #b8c0d4;
+  --ring: #0077b6;
   --radius: 1rem;
-  --sidebar: #e4eef8;
-  --sidebar-foreground: #0b1f33;
-  --sidebar-primary: #0b4f9c;
-  --sidebar-primary-foreground: #f5faff;
-  --sidebar-accent: #cfe3f5;
-  --sidebar-accent-foreground: #0b1f33;
-  --sidebar-border: #c9dae9;
-  --sidebar-ring: #1aa6e0;
+  --sidebar: #c5cddd;
+  --sidebar-foreground: #0b1026;
+  --sidebar-primary: #b8c0e0;
+  --sidebar-primary-foreground: #03045e;
+  --sidebar-accent: #b4bdd3;
+  --sidebar-accent-foreground: #03045e;
+  --sidebar-border: transparent;
+  --sidebar-ring: #0077b6;
   --cream: #f3eee4;
-  --cyan: #1aa6e0;
+  --cyan: #0077b6;
 }
 
 /* Marketing landing — dark cinematic surface */
@@ -84,7 +84,7 @@
   --foreground: #f7f4ee;
   --card: #0b1524;
   --card-foreground: #f7f4ee;
-  --primary: #1aa6e0;
+  --primary: #0077b6;
   --primary-foreground: #070b14;
   --muted: #1a2740;
   --muted-foreground: #c5d0dc;
@@ -110,6 +110,6 @@ body {
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--cyan) 40%, white);
+  background: color-mix(in srgb, var(--cyan) 35%, white);
   color: var(--foreground);
 }

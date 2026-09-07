@@ -27,13 +27,13 @@ export function DashboardShellClient({
   return (
     <div className="flex h-dvh overflow-hidden bg-background">
       <Sidebar
-        items={NAV_BY_ROLE[role]}
+        entries={NAV_BY_ROLE[role]}
         homeHref={LANDING_HOME}
         role={role}
         mobileOpen={mobileOpen}
         onMobileClose={() => setMobileOpen(false)}
       />
-      <div className="flex min-h-0 min-w-0 flex-1 flex-col md:ml-60">
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col md:ml-64">
         <Topbar
           role={role}
           displayName={displayName}

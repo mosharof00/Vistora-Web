@@ -79,3 +79,41 @@ export function buildEmployerDocPath(
     extension,
   });
 }
+
+/** Case processing docs under case-docs/cases/{caseId}/{docType}/ */
+export function buildCaseDocPath(
+  caseId: string,
+  docType: string,
+  fileId: string,
+  extension: string
+) {
+  return buildStorageObjectPath({
+    folder: "cases",
+    ownerId: caseId,
+    docType,
+    fileId,
+    extension,
+  });
+}
+
+/** Candidate identity docs under passports/candidates/{id}/{docType}/ */
+export function buildCandidateDocPath(
+  candidateId: string,
+  docType: string,
+  fileId: string,
+  extension: string
+) {
+  return buildStorageObjectPath({
+    folder: "candidates",
+    ownerId: candidateId,
+    docType,
+    fileId,
+    extension,
+  });
+}
+
+export function extensionFromFileName(fileName: string) {
+  const parts = fileName.split(".");
+  if (parts.length < 2) return "bin";
+  return parts.pop()!.toLowerCase().slice(0, 10) || "bin";
+}

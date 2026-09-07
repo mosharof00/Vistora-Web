@@ -22,26 +22,28 @@ export const brand = {
   assetVersion: "1",
 
   /**
-   * Palette from the bird-and-briefcase logo.
-   * Dashboard maps these into CSS variables in globals.css.
+   * Dashboard palette — finance-dashboard pattern with Vistora deep blue.
+   * Keep in sync with :root tokens in globals.css.
    */
   colors: {
-    /** Deep royal blue — primary buttons */
-    primary: "#0b4f9c",
-    primaryHover: "#083d7a",
-    /** Bright cyan highlight from wing tips */
-    accent: "#1aa6e0",
-    /** Very light tint of logo blue — page background */
-    background: "#eef5fb",
-    /** Slightly cooler sidebar */
-    sidebar: "#e4eef8",
-    /** Card / elevated surface */
+    /** Deep blue — primary actions + active nav */
+    primary: "#03045e",
+    primaryHover: "#02033f",
+    /** Mid blue highlight (charts / focus ring) */
+    accent: "#0077b6",
+    /** Page canvas — soft blue-gray */
+    background: "#dde2ee",
+    /** Sidebar deeper than page (Import Mark style) */
+    sidebar: "#c5cddd",
+    /** Selected nav — light pill */
+    sidebarSelected: "#b8c0e0",
+    /** Elevated cards */
     card: "#ffffff",
-    /** Near-navy ink for text */
-    foreground: "#0b1f33",
-    muted: "#d7e4f2",
-    mutedForeground: "#5a738c",
-    border: "#c9dae9",
+    /** Near-navy ink */
+    foreground: "#0b1026",
+    muted: "#cfd5e4",
+    mutedForeground: "#5c647a",
+    border: "#b8c0d4",
     destructive: "#b42318",
     /** Marketing dark (landing only) */
     navy: "#070b14",

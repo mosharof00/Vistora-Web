@@ -57,9 +57,9 @@ Gmail: Google Account → Security → 2-Step Verification → App passwords →
 <p>Use the 6-digit code below to verify your email address.</p>
 
 <div style="margin: 32px 0; text-align: center;">
-  <div style="display: inline-block; background: #eef5fb; border-radius: 12px; padding: 24px 40px;">
-    <p style="margin: 0; font-size: 13px; color: #5a738c; letter-spacing: 1px; text-transform: uppercase; font-family: sans-serif;">Your verification code</p>
-    <p style="margin: 12px 0 0; font-size: 36px; font-weight: 700; letter-spacing: 8px; color: #0b1f33; font-family: monospace;">{{ .Token }}</p>
+  <div style="display: inline-block; background: #eef2f6; border-radius: 12px; padding: 24px 40px;">
+    <p style="margin: 0; font-size: 13px; color: #6b7289; letter-spacing: 1px; text-transform: uppercase; font-family: sans-serif;">Your verification code</p>
+    <p style="margin: 12px 0 0; font-size: 36px; font-weight: 700; letter-spacing: 8px; color: #03045e; font-family: monospace;">{{ .Token }}</p>
   </div>
 </div>
 
@@ -84,9 +84,9 @@ Gmail: Google Account → Security → 2-Step Verification → App passwords →
 <p>Use the 6-digit code below to reset or change your password.</p>
 
 <div style="margin: 32px 0; text-align: center;">
-  <div style="display: inline-block; background: #eef5fb; border-radius: 12px; padding: 24px 40px;">
-    <p style="margin: 0; font-size: 13px; color: #5a738c; letter-spacing: 1px; text-transform: uppercase; font-family: sans-serif;">Password reset code</p>
-    <p style="margin: 12px 0 0; font-size: 36px; font-weight: 700; letter-spacing: 8px; color: #0b1f33; font-family: monospace;">{{ .Token }}</p>
+  <div style="display: inline-block; background: #eef2f6; border-radius: 12px; padding: 24px 40px;">
+    <p style="margin: 0; font-size: 13px; color: #6b7289; letter-spacing: 1px; text-transform: uppercase; font-family: sans-serif;">Password reset code</p>
+    <p style="margin: 12px 0 0; font-size: 36px; font-weight: 700; letter-spacing: 8px; color: #03045e; font-family: monospace;">{{ .Token }}</p>
   </div>
 </div>
 
@@ -120,7 +120,7 @@ Used when admin invites staff / HR / candidates.
   <div style="text-align: center; margin: 0 0 16px;">
     <a
       href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=invite&next=/set-password"
-      style="display: inline-block; background: #0b4f9c; color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 600; padding: 14px 28px; border-radius: 8px;"
+      style="display: inline-block; background: #03045e; color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 600; padding: 14px 28px; border-radius: 8px;"
     >
       Accept invite
     </a>
@@ -162,6 +162,22 @@ npm run seed:admin
 ```
 
 Open `http://localhost:3000/login` and sign in.
+
+### Demo users (all roles)
+
+```bash
+npm run seed:demo
+```
+
+Creates users + sample companies, agents, orders, cases, payments, HR rows.
+
+| Role | Email | Password |
+|---|---|---|
+| admin | `admin@vistora.com` | `SEED_DEMO_PASSWORD` (default `12345678`) |
+| staff | `staff@vistora.com` | same |
+| hr | `hr@vistora.com` | same |
+| office_assistant | `office@vistora.com` | same |
+| candidate | `candidate@vistora.com` | same |
 
 ### Public registration
 

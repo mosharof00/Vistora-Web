@@ -1,5 +1,4 @@
 import { BrandLogo } from "@/components/layout/brand-logo";
-import { Toaster } from "sonner";
 
 /**
  * Auth pages layout. Middleware handles bouncing signed-in users from /login.
@@ -18,7 +17,6 @@ export default function AuthLayout({
         </div>
         {children}
       </div>
-      <Toaster richColors position="top-center" />
     </div>
   );
 }
