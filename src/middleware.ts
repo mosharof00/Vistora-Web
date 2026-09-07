@@ -14,6 +14,7 @@ const AUTH_PATHS = [
   "/forgot-password",
   "/reset-password",
   "/set-password",
+  "/unauthorized",
 ];
 
 const PUBLIC_PATHS = ["/"];
