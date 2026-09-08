@@ -1284,55 +1284,109 @@ export type Database = {
         Row: {
           candidate_id: string
           created_at: string
+          date_of_birth: string | null
+          emergency_contact_address: string | null
+          emergency_contact_name: string | null
+          emergency_contact_phone: string | null
+          emergency_contact_relationship: string | null
           expiry_date: string | null
+          father_name: string | null
+          full_name_as_in_passport: string | null
+          given_names: string | null
           id: string
           is_current: boolean
           issue_date: string | null
+          issuing_authority: string | null
           issuing_country: string
+          legal_guardian_name: string | null
+          mother_name: string | null
           mrz_line1: string | null
           mrz_line2: string | null
+          nationality_label: string | null
           notes: string | null
           passport_number: string
           passport_type: string
+          permanent_address: string | null
+          personal_no: string | null
+          place_of_birth: string | null
           place_of_issue: string | null
+          previous_passport_no: string | null
           scan_back_path: string | null
           scan_front_path: string | null
+          sex: string | null
+          surname: string | null
           updated_at: string
         }
         Insert: {
           candidate_id: string
           created_at?: string
+          date_of_birth?: string | null
+          emergency_contact_address?: string | null
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
+          emergency_contact_relationship?: string | null
           expiry_date?: string | null
+          father_name?: string | null
+          full_name_as_in_passport?: string | null
+          given_names?: string | null
           id?: string
           is_current?: boolean
           issue_date?: string | null
+          issuing_authority?: string | null
           issuing_country?: string
+          legal_guardian_name?: string | null
+          mother_name?: string | null
           mrz_line1?: string | null
           mrz_line2?: string | null
+          nationality_label?: string | null
           notes?: string | null
           passport_number: string
           passport_type?: string
+          permanent_address?: string | null
+          personal_no?: string | null
+          place_of_birth?: string | null
           place_of_issue?: string | null
+          previous_passport_no?: string | null
           scan_back_path?: string | null
           scan_front_path?: string | null
+          sex?: string | null
+          surname?: string | null
           updated_at?: string
         }
         Update: {
           candidate_id?: string
           created_at?: string
+          date_of_birth?: string | null
+          emergency_contact_address?: string | null
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
+          emergency_contact_relationship?: string | null
           expiry_date?: string | null
+          father_name?: string | null
+          full_name_as_in_passport?: string | null
+          given_names?: string | null
           id?: string
           is_current?: boolean
           issue_date?: string | null
+          issuing_authority?: string | null
           issuing_country?: string
+          legal_guardian_name?: string | null
+          mother_name?: string | null
           mrz_line1?: string | null
           mrz_line2?: string | null
+          nationality_label?: string | null
           notes?: string | null
           passport_number?: string
           passport_type?: string
+          permanent_address?: string | null
+          personal_no?: string | null
+          place_of_birth?: string | null
           place_of_issue?: string | null
+          previous_passport_no?: string | null
           scan_back_path?: string | null
           scan_front_path?: string | null
+          sex?: string | null
+          surname?: string | null
           updated_at?: string
         }
         Relationships: [

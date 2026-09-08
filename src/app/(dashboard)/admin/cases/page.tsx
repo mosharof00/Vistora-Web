@@ -4,23 +4,44 @@ import { Plus } from "lucide-react";
 
 import { CasesTable } from "@/app/(dashboard)/admin/cases/cases-table";
 import { CasesFlashToast } from "@/app/(dashboard)/admin/cases/cases-flash-toast";
+import { ListFilters } from "@/components/layout/list-filters";
 import { buttonVariants } from "@/components/ui/button";
+import { ilikeOr } from "@/lib/list-filters";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
+import { CASE_STATUS_OPTIONS } from "@/lib/validations/candidate-case";
 
 export default async function AdminCasesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ created?: string; updated?: string }>;
+  searchParams: Promise<{
+    created?: string;
+    updated?: string;
+    q?: string;
+    status?: string;
+  }>;
 }) {
   const params = await searchParams;
   const supabase = await createClient();
-  const { data, error } = await supabase
+
+  let query = supabase
     .from("candidate_cases")
     .select(
       "id, case_code, overall_status, mofa_number, processing_office, candidates(full_name, candidate_code), visa_batches(batch_code), job_orders(order_code), agents(full_name, agency_name)"
     )
     .order("created_at", { ascending: false });
+
+  if (params.status) {
+    query = query.eq("overall_status", params.status);
+  }
+  const searchOr = params.q
+    ? ilikeOr(["case_code", "mofa_number", "processing_office"], params.q)
+    : null;
+  if (searchOr) {
+    query = query.or(searchOr);
+  }
+
+  const { data, error } = await query;
 
   if (error) {
     return (
@@ -75,7 +96,7 @@ export default async function AdminCasesPage({
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Cases</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            {rows.length} total · {processing} processing · {cleared} cleared+
+            {rows.length} shown · {processing} processing · {cleared} cleared+
           </p>
         </div>
         <Link
@@ -86,6 +107,13 @@ export default async function AdminCasesPage({
           Add case
         </Link>
       </div>
+
+      <Suspense fallback={null}>
+        <ListFilters
+          searchPlaceholder="Search case code, MOFA, office…"
+          statusOptions={CASE_STATUS_OPTIONS}
+        />
+      </Suspense>
 
       <CasesTable cases={rows} />
     </div>

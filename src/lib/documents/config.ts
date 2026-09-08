@@ -5,10 +5,15 @@ export type DocumentOwnerType =
   Database["public"]["Enums"]["document_owner_type"];
 export type DocumentType = Database["public"]["Enums"]["document_type"];
 
+/** What the slot accepts in the file picker / validation. */
+export type DocAcceptKind = "image" | "pdf_or_image";
+
 export type DocSlot = {
   type: DocumentType;
   label: string;
   hint: string;
+  /** Default `pdf_or_image`. Photo slots use `image`. */
+  accept?: DocAcceptKind;
 };
 
 export const EMPLOYER_DOC_SLOTS: DocSlot[] = [
@@ -86,22 +91,48 @@ export const CANDIDATE_DOC_SLOTS: DocSlot[] = [
   {
     type: "passport_scan",
     label: "Passport scan",
-    hint: "Passport bio page / full scan",
+    hint: "Passport bio page / full scan (PDF or image)",
+    accept: "pdf_or_image",
   },
   {
     type: "nid",
     label: "NID",
-    hint: "National ID card",
+    hint: "National ID card (PDF or image)",
+    accept: "pdf_or_image",
   },
   {
     type: "photo",
     label: "Photo",
-    hint: "Passport-size photo (file copy)",
+    hint: "Passport-size photo — images only",
+    accept: "image",
   },
   {
     type: "other",
     label: "Other",
-    hint: "Misc. candidate file",
+    hint: "Misc. candidate file (PDF or image)",
+    accept: "pdf_or_image",
+  },
+];
+
+/** Slots shown on passport detail — files still owned by the candidate. */
+export const PASSPORT_DOC_SLOTS: DocSlot[] = [
+  {
+    type: "passport_scan",
+    label: "Passport scan",
+    hint: "Full booklet PDF or biodata page",
+    accept: "pdf_or_image",
+  },
+  {
+    type: "photo",
+    label: "Photo",
+    hint: "Passport photo — images only",
+    accept: "image",
+  },
+  {
+    type: "other",
+    label: "Other",
+    hint: "Extra passport-related file (PDF or image)",
+    accept: "pdf_or_image",
   },
 ];
 
@@ -110,37 +141,78 @@ export const EMPLOYEE_DOC_SLOTS: DocSlot[] = [
     type: "nid",
     label: "NID",
     hint: "National ID / staff ID scan",
+    accept: "pdf_or_image",
   },
   {
     type: "contract",
     label: "Contract",
     hint: "Employment agreement",
+    accept: "pdf_or_image",
   },
   {
     type: "photo",
     label: "Photo copy",
-    hint: "Extra photo file (optional)",
+    hint: "Extra photo — images only",
+    accept: "image",
   },
   {
     type: "other",
     label: "Other",
     hint: "Misc. employee file",
+    accept: "pdf_or_image",
   },
 ];
 
-const ALLOWED_MIME = new Set([
-  "application/pdf",
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-]);
+const IMAGE_MIME = new Set(["image/jpeg", "image/png", "image/webp"]);
+const PDF_MIME = new Set(["application/pdf"]);
+const IMAGE_EXT = new Set(["jpg", "jpeg", "png", "webp"]);
+const PDF_EXT = new Set(["pdf"]);
 
 const MAX_BYTES = 15 * 1024 * 1024;
 
-export function validateUploadFile(file: File): string | null {
+export function acceptKindForSlot(slot: DocSlot): DocAcceptKind {
+  return slot.accept ?? "pdf_or_image";
+}
+
+export function acceptAttrForKind(kind: DocAcceptKind) {
+  if (kind === "image") {
+    return "image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp";
+  }
+  return "application/pdf,.pdf,image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp";
+}
+
+export function acceptLabelForKind(kind: DocAcceptKind) {
+  return kind === "image" ? "JPG, PNG, or WebP" : "PDF, JPG, PNG, or WebP";
+}
+
+function fileExt(fileName: string) {
+  return fileName.split(".").pop()?.toLowerCase() ?? "";
+}
+
+export function validateUploadFile(
+  file: File,
+  accept: DocAcceptKind = "pdf_or_image"
+): string | null {
   if (!file || file.size === 0) return "Choose a file to upload.";
   if (file.size > MAX_BYTES) return "File must be 15 MB or smaller.";
-  if (!ALLOWED_MIME.has(file.type)) {
+
+  const mime = file.type || "";
+  const ext = fileExt(file.name);
+  const isImage =
+    IMAGE_MIME.has(mime) ||
+    ((mime === "application/octet-stream" || !mime) && IMAGE_EXT.has(ext));
+  const isPdf =
+    PDF_MIME.has(mime) ||
+    ((mime === "application/octet-stream" || !mime) && PDF_EXT.has(ext));
+
+  if (accept === "image") {
+    if (!isImage) {
+      return "This field accepts images only (JPG, PNG, or WebP).";
+    }
+    return null;
+  }
+
+  if (!isImage && !isPdf) {
     return "Use PDF, JPG, PNG, or WebP.";
   }
   return null;
@@ -196,6 +268,7 @@ export function formatDocTypeLabel(docType: string) {
       ...EMPLOYER_DOC_SLOTS,
       ...CASE_DOC_SLOTS,
       ...CANDIDATE_DOC_SLOTS,
+      ...PASSPORT_DOC_SLOTS,
       ...EMPLOYEE_DOC_SLOTS,
     ].find((s) => s.type === docType)?.label ?? docType.replaceAll("_", " ")
   );

@@ -118,7 +118,7 @@ export function AgentsTable({ agents }: { agents: Agent[] }) {
                 </td>
                 <td className="px-4 py-3 text-right">
                   <Link
-                    href={`/admin/agents/${agent.id}`}
+                    href={`/admin/agents/${agent.id}/edit`}
                     className={cn(
                       buttonVariants({ variant: "ghost", size: "sm" }),
                       "gap-1.5"

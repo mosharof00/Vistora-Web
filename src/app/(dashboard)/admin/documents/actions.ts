@@ -61,6 +61,7 @@ function revalidateOwner(ownerType: DocumentOwnerType, ownerId: string) {
     case "candidate":
       revalidatePath(`/admin/candidates/${ownerId}`);
       revalidatePath("/admin/candidates");
+      revalidatePath("/admin/passports");
       break;
     case "job_order":
       revalidatePath(`/admin/job-orders/${ownerId}`);
@@ -92,7 +93,7 @@ export async function uploadDocument(
     return { error: "Choose a file to upload." };
   }
 
-  const fileError = validateUploadFile(file);
+  const fileError = validateUploadFile(file, "pdf_or_image");
   if (fileError) return { error: fileError };
 
   const bucket = bucketForOwner(ownerType);
@@ -110,6 +111,13 @@ export async function uploadDocument(
   const supabase = await createClient();
   const contentType = mimeForUpload(file);
   const bytes = new Uint8Array(await file.arrayBuffer());
+
+  const { data: previous } = await supabase
+    .from("documents")
+    .select("id, storage_bucket, storage_path")
+    .eq("owner_type", ownerType)
+    .eq("owner_id", ownerId)
+    .eq("doc_type", docType);
 
   const { error: uploadError } = await supabase.storage
     .from(bucket)
@@ -144,6 +152,25 @@ export async function uploadDocument(
   if (insertError) {
     await supabase.storage.from(bucket).remove([storagePath]);
     return { error: insertError.message };
+  }
+
+  if (previous?.length) {
+    const byBucket = new Map<string, string[]>();
+    for (const row of previous) {
+      const list = byBucket.get(row.storage_bucket) ?? [];
+      list.push(row.storage_path);
+      byBucket.set(row.storage_bucket, list);
+    }
+    for (const [b, paths] of byBucket) {
+      await supabase.storage.from(b).remove(paths);
+    }
+    await supabase
+      .from("documents")
+      .delete()
+      .in(
+        "id",
+        previous.map((p) => p.id)
+      );
   }
 
   revalidateOwner(ownerType, ownerId);

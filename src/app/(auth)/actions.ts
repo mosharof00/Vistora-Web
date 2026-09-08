@@ -48,7 +48,19 @@ export async function login(
   });
 
   if (error) {
-    return { error: error.message || "Invalid email or password." };
+    const msg = error.message || "Invalid email or password.";
+    // Status 0 / "fetch failed" = cannot reach Supabase (proxy/DNS/network), not bad password.
+    if (
+      msg === "fetch failed" ||
+      error.name === "AuthRetryableFetchError" ||
+      ("status" in error && error.status === 0)
+    ) {
+      return {
+        error:
+          "Cannot reach Supabase Auth (network/proxy). Stop the Cursor-started server and run: ./scripts/dev-local.sh",
+      };
+    }
+    return { error: msg };
   }
 
   const role = getUserRole(data.user);

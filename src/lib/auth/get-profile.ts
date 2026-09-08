@@ -15,12 +15,14 @@ export type UserProfile = {
   role: UserRole;
 };
 
-function storagePublicUrl(path: string | null): string | null {
-  if (!path) return null;
-  if (path.startsWith("http")) return path;
-  const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  if (!base) return path;
-  return `${base}/storage/v1/object/public/avatars/${path}`;
+function avatarApiUrl(
+  kind: "admins" | "employees" | "candidates",
+  id: string,
+  hasPath: string | null
+): string | null {
+  if (!hasPath) return null;
+  if (hasPath.startsWith("http")) return hasPath;
+  return `/api/avatars/${kind}/${id}`;
 }
 
 export const getCurrentProfile = cache(async function getCurrentProfile(
@@ -43,7 +45,7 @@ export const getCurrentProfile = cache(async function getCurrentProfile(
       fullName: data.full_name,
       email: data.email,
       phone: data.phone,
-      avatarUrl: storagePublicUrl(data.avatar_path),
+      avatarUrl: avatarApiUrl("admins", data.id, data.avatar_path),
       createdAt: data.created_at,
       role,
     };
@@ -63,7 +65,7 @@ export const getCurrentProfile = cache(async function getCurrentProfile(
       fullName: data.full_name,
       email: data.email,
       phone: data.phone,
-      avatarUrl: storagePublicUrl(data.avatar_path),
+      avatarUrl: avatarApiUrl("employees", data.id, data.avatar_path),
       createdAt: data.created_at,
       role,
     };
@@ -82,7 +84,7 @@ export const getCurrentProfile = cache(async function getCurrentProfile(
     fullName: data.full_name,
     email: data.email ?? "",
     phone: data.phone,
-    avatarUrl: storagePublicUrl(data.photo_path),
+    avatarUrl: avatarApiUrl("candidates", data.id, data.photo_path),
     createdAt: data.created_at,
     role,
   };

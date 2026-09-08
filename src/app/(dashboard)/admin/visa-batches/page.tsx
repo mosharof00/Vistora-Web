@@ -4,23 +4,44 @@ import { Plus } from "lucide-react";
 
 import { VisaBatchesTable } from "@/app/(dashboard)/admin/visa-batches/visa-batches-table";
 import { VisaBatchesFlashToast } from "@/app/(dashboard)/admin/visa-batches/visa-batches-flash-toast";
+import { ListFilters } from "@/components/layout/list-filters";
 import { buttonVariants } from "@/components/ui/button";
+import { ilikeOr } from "@/lib/list-filters";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
+import { VISA_BATCH_STATUS_OPTIONS } from "@/lib/validations/visa-batch";
 
 export default async function AdminVisaBatchesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ created?: string; updated?: string }>;
+  searchParams: Promise<{
+    created?: string;
+    updated?: string;
+    q?: string;
+    status?: string;
+  }>;
 }) {
   const params = await searchParams;
   const supabase = await createClient();
-  const { data, error } = await supabase
+
+  let query = supabase
     .from("visa_batches")
     .select(
       "id, batch_code, title, status, visa_number, quota_count, filled_count, pro_office, job_order_id, job_orders(order_code, title)"
     )
     .order("created_at", { ascending: false });
+
+  if (params.status) {
+    query = query.eq("status", params.status);
+  }
+  const searchOr = params.q
+    ? ilikeOr(["batch_code", "title", "visa_number", "pro_office"], params.q)
+    : null;
+  if (searchOr) {
+    query = query.or(searchOr);
+  }
+
+  const { data, error } = await query;
 
   if (error) {
     return (
@@ -71,7 +92,7 @@ export default async function AdminVisaBatchesPage({
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Visa Batches</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            {rows.length} total · {openCount} open · {seatsLeft} seats remaining
+            {rows.length} shown · {openCount} open · {seatsLeft} seats remaining
           </p>
         </div>
         <Link
@@ -82,6 +103,13 @@ export default async function AdminVisaBatchesPage({
           Add visa batch
         </Link>
       </div>
+
+      <Suspense fallback={null}>
+        <ListFilters
+          searchPlaceholder="Search batch code, title, visa no…"
+          statusOptions={VISA_BATCH_STATUS_OPTIONS}
+        />
+      </Suspense>
 
       <VisaBatchesTable batches={rows} />
     </div>

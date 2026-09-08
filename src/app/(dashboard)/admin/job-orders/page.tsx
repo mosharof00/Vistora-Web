@@ -4,23 +4,44 @@ import { Plus } from "lucide-react";
 
 import { JobOrdersTable } from "@/app/(dashboard)/admin/job-orders/job-orders-table";
 import { JobOrdersFlashToast } from "@/app/(dashboard)/admin/job-orders/job-orders-flash-toast";
+import { ListFilters } from "@/components/layout/list-filters";
 import { buttonVariants } from "@/components/ui/button";
+import { ilikeOr } from "@/lib/list-filters";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
+import { JOB_ORDER_STATUS_OPTIONS } from "@/lib/validations/job-order";
 
 export default async function AdminJobOrdersPage({
   searchParams,
 }: {
-  searchParams: Promise<{ created?: string; updated?: string }>;
+  searchParams: Promise<{
+    created?: string;
+    updated?: string;
+    q?: string;
+    status?: string;
+  }>;
 }) {
   const params = await searchParams;
   const supabase = await createClient();
-  const { data, error } = await supabase
+
+  let query = supabase
     .from("job_orders")
     .select(
       "id, order_code, title, status, country_code, required_count, filled_count, ticket_provision, salary_amount, salary_currency_code, employer_companies(trade_name, legal_name), job_categories(name)"
     )
     .order("created_at", { ascending: false });
+
+  if (params.status) {
+    query = query.eq("status", params.status);
+  }
+  const searchOr = params.q
+    ? ilikeOr(["order_code", "title", "country_code"], params.q)
+    : null;
+  if (searchOr) {
+    query = query.or(searchOr);
+  }
+
+  const { data, error } = await query;
 
   if (error) {
     return (
@@ -73,7 +94,7 @@ export default async function AdminJobOrdersPage({
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Job Orders</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            {rows.length} total · {openCount} open · {seats} seats remaining
+            {rows.length} shown · {openCount} open · {seats} seats remaining
           </p>
         </div>
         <Link
@@ -84,6 +105,13 @@ export default async function AdminJobOrdersPage({
           Add job order
         </Link>
       </div>
+
+      <Suspense fallback={null}>
+        <ListFilters
+          searchPlaceholder="Search order code, title, country…"
+          statusOptions={JOB_ORDER_STATUS_OPTIONS}
+        />
+      </Suspense>
 
       <JobOrdersTable orders={rows} />
     </div>

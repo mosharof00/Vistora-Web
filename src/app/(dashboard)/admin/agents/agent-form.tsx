@@ -307,7 +307,11 @@ export function AgentForm({
                     : "Save changes"}
               </Button>
               <Link
-                href="/admin/agents"
+                href={
+                  mode === "edit" && agentId
+                    ? `/admin/agents/${agentId}`
+                    : "/admin/agents"
+                }
                 className={buttonVariants({ variant: "outline" })}
               >
                 Cancel

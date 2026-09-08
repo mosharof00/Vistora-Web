@@ -4,21 +4,44 @@ import { Plus } from "lucide-react";
 
 import { AgentsTable } from "@/app/(dashboard)/admin/agents/agents-table";
 import { AgentsFlashToast } from "@/app/(dashboard)/admin/agents/agents-flash-toast";
+import { ListFilters } from "@/components/layout/list-filters";
 import { buttonVariants } from "@/components/ui/button";
+import { ilikeOr, PARTY_STATUS_OPTIONS } from "@/lib/list-filters";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
 
 export default async function AdminAgentsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ created?: string; updated?: string }>;
+  searchParams: Promise<{
+    created?: string;
+    updated?: string;
+    q?: string;
+    status?: string;
+  }>;
 }) {
   const params = await searchParams;
   const supabase = await createClient();
-  const { data: agents, error } = await supabase
+
+  let query = supabase
     .from("agents")
     .select("*")
     .order("created_at", { ascending: false });
+
+  if (params.status) {
+    query = query.eq("status", params.status);
+  }
+  const searchOr = params.q
+    ? ilikeOr(
+        ["full_name", "agency_name", "phone", "email", "agent_code"],
+        params.q
+      )
+    : null;
+  if (searchOr) {
+    query = query.or(searchOr);
+  }
+
+  const { data: agents, error } = await query;
 
   if (error) {
     return (
@@ -44,7 +67,7 @@ export default async function AdminAgentsPage({
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Agents</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            {rows.length} total · {activeCount} active — Admin-only create/edit
+            {rows.length} shown · {activeCount} active — Admin-only create/edit
           </p>
         </div>
         <Link
@@ -55,6 +78,13 @@ export default async function AdminAgentsPage({
           Add agent
         </Link>
       </div>
+
+      <Suspense fallback={null}>
+        <ListFilters
+          searchPlaceholder="Search name, agency, phone, email…"
+          statusOptions={PARTY_STATUS_OPTIONS}
+        />
+      </Suspense>
 
       <AgentsTable agents={rows} />
     </div>

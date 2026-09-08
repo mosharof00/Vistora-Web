@@ -4,21 +4,52 @@ import { Plus } from "lucide-react";
 
 import { CompaniesTable } from "@/app/(dashboard)/admin/companies/companies-table";
 import { CompaniesFlashToast } from "@/app/(dashboard)/admin/companies/companies-flash-toast";
+import { ListFilters } from "@/components/layout/list-filters";
 import { buttonVariants } from "@/components/ui/button";
+import { ilikeOr, PARTY_STATUS_OPTIONS } from "@/lib/list-filters";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
 
 export default async function AdminCompaniesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ created?: string; updated?: string }>;
+  searchParams: Promise<{
+    created?: string;
+    updated?: string;
+    q?: string;
+    status?: string;
+  }>;
 }) {
   const params = await searchParams;
   const supabase = await createClient();
-  const { data: companies, error } = await supabase
+
+  let query = supabase
     .from("employer_companies")
     .select("*")
     .order("created_at", { ascending: false });
+
+  if (params.status) {
+    query = query.eq("status", params.status);
+  }
+  const searchOr = params.q
+    ? ilikeOr(
+        [
+          "trade_name",
+          "legal_name",
+          "company_code",
+          "contact_person",
+          "contact_phone",
+          "contact_email",
+          "city",
+        ],
+        params.q
+      )
+    : null;
+  if (searchOr) {
+    query = query.or(searchOr);
+  }
+
+  const { data: companies, error } = await query;
 
   if (error) {
     return (
@@ -46,7 +77,7 @@ export default async function AdminCompaniesPage({
             Employer Companies
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            {rows.length} total · {activeCount} active — Admin-only create/edit
+            {rows.length} shown · {activeCount} active — Admin-only create/edit
           </p>
         </div>
         <Link
@@ -57,6 +88,13 @@ export default async function AdminCompaniesPage({
           Add company
         </Link>
       </div>
+
+      <Suspense fallback={null}>
+        <ListFilters
+          searchPlaceholder="Search name, code, contact, city…"
+          statusOptions={PARTY_STATUS_OPTIONS}
+        />
+      </Suspense>
 
       <CompaniesTable companies={rows} />
     </div>

@@ -82,8 +82,9 @@ export async function updateAgent(
 
   revalidatePath("/admin/agents");
   revalidatePath(`/admin/agents/${id}`);
+  revalidatePath(`/admin/agents/${id}/edit`);
   revalidatePath("/admin");
-  redirect("/admin/agents?updated=1");
+  redirect(`/admin/agents/${id}?updated=1`);
 }
 
 export async function setAgentStatus(
@@ -101,5 +102,6 @@ export async function setAgentStatus(
 
   revalidatePath("/admin/agents");
   revalidatePath(`/admin/agents/${id}`);
+  revalidatePath(`/admin/agents/${id}/edit`);
   revalidatePath("/admin");
 }

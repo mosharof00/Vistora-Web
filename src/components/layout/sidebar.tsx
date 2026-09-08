@@ -8,6 +8,7 @@ import {
   Building2,
   UserRound,
   Users,
+  BookOpen,
   Briefcase,
   Layers,
   FolderOpen,
@@ -45,6 +46,7 @@ const ICONS: Record<NavIcon, LucideIcon> = {
   companies: Building2,
   agents: UserRound,
   candidates: Users,
+  passports: BookOpen,
   orders: Briefcase,
   batches: Layers,
   cases: FolderOpen,
@@ -280,8 +282,8 @@ export function Sidebar({
     };
   }, [mobileOpen]);
 
-  const asideClass =
-    "flex h-dvh w-64 flex-col bg-sidebar text-sidebar-foreground";
+  const asideSurface =
+    "h-dvh w-64 flex-col bg-sidebar text-sidebar-foreground";
 
   return (
     <>
@@ -294,13 +296,13 @@ export function Sidebar({
         />
       ) : null}
 
-      {/* Mobile drawer — Import Mark pattern */}
+      {/* Mobile drawer — slides in from left (Import Mark pattern) */}
       <aside
         id="mobile-sidebar"
         aria-hidden={!mobileOpen}
         className={cn(
-          "fixed inset-y-0 left-0 z-50 transition-transform duration-200 ease-in-out md:hidden",
-          asideClass,
+          "fixed inset-y-0 left-0 z-50 flex transition-transform duration-200 ease-in-out md:hidden",
+          asideSurface,
           mobileOpen ? "translate-x-0" : "pointer-events-none -translate-x-full"
         )}
       >
@@ -313,11 +315,11 @@ export function Sidebar({
         />
       </aside>
 
-      {/* Desktop fixed column */}
+      {/* Desktop column — never bare `flex` (conflicts with `hidden` below md) */}
       <aside
         className={cn(
           "fixed inset-y-0 left-0 z-30 hidden md:flex",
-          asideClass
+          asideSurface
         )}
       >
         <SidebarHeader homeHref={homeHref} />

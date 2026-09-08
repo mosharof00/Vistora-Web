@@ -45,7 +45,7 @@ export default async function CandidateDetailPage({
     { data: candidate, error },
     { data: docs },
     { data: cases },
-    { data: passport },
+    { data: passports },
   ] = await Promise.all([
     supabase
       .from("candidates")
@@ -68,11 +68,11 @@ export default async function CandidateDetailPage({
     supabase
       .from("passports")
       .select(
-        "passport_number, passport_type, issuing_country, issue_date, expiry_date, place_of_issue, is_current"
+        "id, passport_number, passport_type, expiry_date, is_current, full_name_as_in_passport, surname, given_names"
       )
       .eq("candidate_id", id)
-      .eq("is_current", true)
-      .maybeSingle(),
+      .order("is_current", { ascending: false })
+      .order("expiry_date", { ascending: false }),
   ]);
 
   if (error || !candidate) notFound();
@@ -83,6 +83,8 @@ export default async function CandidateDetailPage({
     full_name: string;
     agency_name: string | null;
   } | null;
+
+  const currentPassport = (passports ?? []).find((p) => p.is_current) ?? null;
 
   return (
     <div className="space-y-6">
@@ -156,12 +158,14 @@ export default async function CandidateDetailPage({
         <div className="rounded-2xl bg-card p-5 shadow-sm ring-1 ring-border/60">
           <p className="text-sm text-muted-foreground">Passport</p>
           <p className="mt-2 truncate text-lg font-semibold">
-            {passport?.passport_number || "—"}
+            {currentPassport?.passport_number || "—"}
           </p>
           <p className="mt-1 text-xs text-muted-foreground">
-            {passport?.expiry_date
-              ? `Exp ${new Date(passport.expiry_date).toLocaleDateString("en-GB")}`
-              : "No current passport row"}
+            {currentPassport?.expiry_date
+              ? `Exp ${new Date(currentPassport.expiry_date).toLocaleDateString("en-GB")}`
+              : passports?.length
+                ? `${passports.length} booklet(s), none current`
+                : "No passport rows"}
           </p>
         </div>
         <div className="rounded-2xl bg-card p-5 shadow-sm ring-1 ring-border/60">
@@ -281,6 +285,86 @@ export default async function CandidateDetailPage({
           </CardContent>
         </Card>
       </div>
+
+      <Card className="shadow-sm">
+        <CardHeader className="flex flex-row items-start justify-between gap-3 space-y-0">
+          <div>
+            <CardTitle>Passports</CardTitle>
+            <CardDescription>
+              Booklet biodata snapshots — structured fields for processing and
+              future resume generation
+            </CardDescription>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Link
+              href={`/admin/passports?candidate=${candidate.id}`}
+              className={cn(buttonVariants({ variant: "ghost", size: "sm" }))}
+            >
+              View all
+            </Link>
+            <Link
+              href={`/admin/passports/new?candidate=${candidate.id}`}
+              className={cn(buttonVariants({ size: "sm" }), "gap-1.5")}
+            >
+              <Plus className="size-3.5" />
+              Add
+            </Link>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {!passports?.length ? (
+            <div className="rounded-xl bg-secondary/40 px-4 py-8 text-center">
+              <p className="text-sm text-muted-foreground">
+                No passport records yet.
+              </p>
+              <Link
+                href={`/admin/passports/new?candidate=${candidate.id}`}
+                className={cn(buttonVariants({ size: "sm" }), "mt-3")}
+              >
+                Add passport
+              </Link>
+            </div>
+          ) : (
+            <ul className="divide-y divide-border/60">
+              {passports.map((row) => {
+                const name =
+                  row.full_name_as_in_passport ||
+                  [row.given_names, row.surname].filter(Boolean).join(" ");
+                return (
+                  <li
+                    key={row.id}
+                    className="flex flex-wrap items-center justify-between gap-2 py-3 first:pt-0 last:pb-0"
+                  >
+                    <div className="min-w-0">
+                      <Link
+                        href={`/admin/passports/${row.id}`}
+                        className="font-medium tabular-nums text-primary hover:underline"
+                      >
+                        {row.passport_number}
+                      </Link>
+                      <p className="mt-0.5 text-xs text-muted-foreground">
+                        {[
+                          name || null,
+                          row.expiry_date
+                            ? `Exp ${new Date(row.expiry_date).toLocaleDateString("en-GB")}`
+                            : null,
+                        ]
+                          .filter(Boolean)
+                          .join(" · ")}
+                      </p>
+                    </div>
+                    {row.is_current ? (
+                      <StatusBadge tone="success">Current</StatusBadge>
+                    ) : (
+                      <StatusBadge tone="neutral">History</StatusBadge>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </CardContent>
+      </Card>
 
       <Card className="shadow-sm">
         <CardHeader className="flex flex-row items-start justify-between gap-3 space-y-0">

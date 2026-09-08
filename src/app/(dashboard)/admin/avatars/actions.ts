@@ -126,3 +126,54 @@ export async function uploadCandidatePhoto(
   revalidatePath("/admin/candidates");
   return { ok: true };
 }
+
+export async function uploadAdminAvatar(
+  formData: FormData
+): Promise<ActionResult> {
+  const { user } = await requireRole("admin");
+  const file = formData.get("file");
+  if (!(file instanceof File)) return { error: "Choose an image." };
+  const err = mimeOk(file);
+  if (err) return { error: err };
+
+  const supabase = await createClient();
+  const { data: existing } = await supabase
+    .from("admins")
+    .select("avatar_path")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  const ext = extensionFromFileName(file.name) || "jpg";
+  const path = buildAvatarPath("admins", user.id, randomUUID(), ext);
+  const bytes = new Uint8Array(await file.arrayBuffer());
+
+  const { error: uploadError } = await supabase.storage
+    .from(STORAGE_BUCKETS.avatars)
+    .upload(path, bytes, {
+      contentType: file.type,
+      upsert: false,
+      cacheControl: "3600",
+    });
+
+  if (uploadError) return { error: uploadError.message };
+
+  const { error: updateError } = await supabase
+    .from("admins")
+    .update({ avatar_path: path })
+    .eq("id", user.id);
+
+  if (updateError) {
+    await supabase.storage.from(STORAGE_BUCKETS.avatars).remove([path]);
+    return { error: updateError.message };
+  }
+
+  if (existing?.avatar_path && existing.avatar_path !== path) {
+    await supabase.storage
+      .from(STORAGE_BUCKETS.avatars)
+      .remove([existing.avatar_path]);
+  }
+
+  revalidatePath("/admin/profile");
+  revalidatePath("/admin");
+  return { ok: true };
+}

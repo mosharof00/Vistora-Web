@@ -6,6 +6,7 @@ import { Camera, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 import {
+  uploadAdminAvatar,
   uploadCandidatePhoto,
   uploadEmployeeAvatar,
 } from "@/app/(dashboard)/admin/avatars/actions";
@@ -19,7 +20,7 @@ export function ProfilePhotoCard({
   name,
   hasPhoto,
 }: {
-  kind: "employees" | "candidates";
+  kind: "employees" | "candidates" | "admins";
   ownerId: string;
   name: string;
   hasPhoto: boolean;
@@ -35,9 +36,11 @@ export function ProfilePhotoCard({
     fd.set("file", file);
     startTransition(async () => {
       const result =
-        kind === "employees"
-          ? await uploadEmployeeAvatar(ownerId, fd)
-          : await uploadCandidatePhoto(ownerId, fd);
+        kind === "admins"
+          ? await uploadAdminAvatar(fd)
+          : kind === "employees"
+            ? await uploadEmployeeAvatar(ownerId, fd)
+            : await uploadCandidatePhoto(ownerId, fd);
       if ("error" in result) {
         toast.error(result.error);
         return;

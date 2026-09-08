@@ -1,12 +1,19 @@
 "use client";
 
 import { useRef, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { FileText, Loader2, Upload } from "lucide-react";
 import { toast } from "sonner";
 
-import { uploadDocument } from "@/app/(dashboard)/admin/documents/actions";
 import { buttonVariants } from "@/components/ui/button";
-import type { DocSlot, DocumentOwnerType } from "@/lib/documents/config";
+import {
+  acceptAttrForKind,
+  acceptKindForSlot,
+  acceptLabelForKind,
+  validateUploadFile,
+  type DocSlot,
+  type DocumentOwnerType,
+} from "@/lib/documents/config";
 import { cn } from "@/lib/utils";
 
 export type DocumentFileRow = {
@@ -67,27 +74,62 @@ function DocumentSlotCard({
   files: DocumentFileRow[];
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [dragging, setDragging] = useState(false);
   const latest = files[0];
+  const acceptKind = acceptKindForSlot(slot);
+  const acceptAttr = acceptAttrForKind(acceptKind);
+  const acceptLabel = acceptLabelForKind(acceptKind);
 
   function uploadFile(file: File | undefined | null) {
     if (!file) return;
+
+    const clientError = validateUploadFile(file, acceptKind);
+    if (clientError) {
+      toast.error(clientError);
+      if (inputRef.current) inputRef.current.value = "";
+      return;
+    }
 
     const fd = new FormData();
     fd.set("ownerType", ownerType);
     fd.set("ownerId", ownerId);
     fd.set("docType", slot.type);
+    fd.set("replace", "1");
     fd.set("file", file);
 
     startTransition(async () => {
-      const result = await uploadDocument(fd);
-      if ("error" in result) {
-        toast.error(result.error);
-        return;
+      try {
+        const res = await fetch("/api/documents/upload", {
+          method: "POST",
+          body: fd,
+        });
+        const payload = (await res.json().catch(() => null)) as {
+          error?: string;
+          ok?: boolean;
+        } | null;
+
+        if (!res.ok || payload?.error) {
+          toast.error(
+            payload?.error ||
+              (res.status === 413
+                ? "File is too large for upload."
+                : "Upload failed.")
+          );
+          return;
+        }
+
+        toast.success(
+          latest
+            ? `${slot.label} replaced.`
+            : `${slot.label} uploaded.`
+        );
+        if (inputRef.current) inputRef.current.value = "";
+        router.refresh();
+      } catch {
+        toast.error("Upload failed. Check your connection and try again.");
       }
-      toast.success(`${slot.label} uploaded.`);
-      if (inputRef.current) inputRef.current.value = "";
     });
   }
 
@@ -126,6 +168,9 @@ function DocumentSlotCard({
         <div className="min-w-0 flex-1">
           <p className="text-sm font-medium">{slot.label}</p>
           <p className="mt-0.5 text-xs text-muted-foreground">{slot.hint}</p>
+          <p className="mt-0.5 text-[11px] text-muted-foreground">
+            Accepts {acceptLabel}
+          </p>
 
           {latest ? (
             <a
@@ -135,7 +180,6 @@ function DocumentSlotCard({
               className="mt-2 block max-w-full truncate text-left text-xs font-medium text-primary hover:underline"
             >
               {latest.file_name}
-              {files.length > 1 ? ` (+${files.length - 1} more)` : ""}
             </a>
           ) : (
             <p className="mt-2 text-xs text-muted-foreground">
@@ -149,7 +193,7 @@ function DocumentSlotCard({
             <input
               ref={inputRef}
               type="file"
-              accept=".pdf,image/jpeg,image/png,image/webp,application/pdf"
+              accept={acceptAttr}
               className="sr-only"
               onChange={(e) => uploadFile(e.target.files?.[0])}
             />
@@ -167,7 +211,7 @@ function DocumentSlotCard({
               ) : (
                 <Upload className="size-3.5" />
               )}
-              {latest ? "Replace / add" : "Browse"}
+              {latest ? "Replace" : "Browse"}
             </button>
             {latest ? (
               <a

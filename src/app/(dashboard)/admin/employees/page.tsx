@@ -4,23 +4,47 @@ import { Plus } from "lucide-react";
 
 import { EmployeesTable } from "@/app/(dashboard)/admin/employees/employees-table";
 import { EmployeesFlashToast } from "@/app/(dashboard)/admin/employees/employees-flash-toast";
+import { ListFilters } from "@/components/layout/list-filters";
 import { buttonVariants } from "@/components/ui/button";
+import { ilikeOr } from "@/lib/list-filters";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
+import { EMPLOYEE_STATUS_OPTIONS } from "@/lib/validations/employee";
 
 export default async function AdminEmployeesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ created?: string; updated?: string }>;
+  searchParams: Promise<{
+    created?: string;
+    updated?: string;
+    q?: string;
+    status?: string;
+  }>;
 }) {
   const params = await searchParams;
   const supabase = await createClient();
-  const { data, error } = await supabase
+
+  let query = supabase
     .from("employees")
     .select(
       "id, employee_code, full_name, email, phone, role, status, department, designation, avatar_path"
     )
     .order("created_at", { ascending: false });
+
+  if (params.status) {
+    query = query.eq("status", params.status);
+  }
+  const searchOr = params.q
+    ? ilikeOr(
+        ["full_name", "employee_code", "email", "phone", "department"],
+        params.q
+      )
+    : null;
+  if (searchOr) {
+    query = query.or(searchOr);
+  }
+
+  const { data, error } = await query;
 
   if (error) {
     return (
@@ -57,7 +81,7 @@ export default async function AdminEmployeesPage({
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Employees</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            {rows.length} total · {activeCount} active — staff, HR, office
+            {rows.length} shown · {activeCount} active — staff, HR, office
           </p>
         </div>
         <Link
@@ -68,6 +92,13 @@ export default async function AdminEmployeesPage({
           Invite employee
         </Link>
       </div>
+
+      <Suspense fallback={null}>
+        <ListFilters
+          searchPlaceholder="Search name, code, email, department…"
+          statusOptions={EMPLOYEE_STATUS_OPTIONS}
+        />
+      </Suspense>
 
       <EmployeesTable employees={rows} />
     </div>

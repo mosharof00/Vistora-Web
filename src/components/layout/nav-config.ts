@@ -5,6 +5,7 @@ export type NavIcon =
   | "companies"
   | "agents"
   | "candidates"
+  | "passports"
   | "orders"
   | "batches"
   | "cases"
@@ -68,6 +69,7 @@ export const NAV_BY_ROLE: Record<UserRole, NavEntry[]> = {
       item("Employer Companies", "/admin/companies", "companies"),
       item("Agents", "/admin/agents", "agents"),
       item("Candidates", "/admin/candidates", "candidates"),
+      item("Passports", "/admin/passports", "passports"),
       item("Employees", "/admin/employees", "employees"),
     ]),
     group("manpower", "Manpower", [
