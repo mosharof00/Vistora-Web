@@ -1,286 +1,497 @@
-import { brand } from "@/config/brand";
-
 export const aboutHome = {
-  kicker: "ABOUT VISTORA",
-  title: "Your travel partner from Dhaka to the world.",
-  body: "Vistora Tours & Travels helps families, professionals, and pilgrims with air tickets, visas, work permits, tours, and Umrah & Hajj — with a consultant who stays with your file from first enquiry to departure.",
-  cta: "Read more",
-  href: "#about",
+  kicker: "About Vistora",
+  titleLead: "Your travel partner from",
+  titleAccent: "Dhaka",
+  titleTrail: "to the world.",
+  body: "Vistora Tours & Travels assists families, professionals, corporate groups, and pilgrims with complex embassy visa dossiers, accredited work permits, curated tour packages, and Umrah & Hajj. A dedicated consultant stays with your file from first consultation through safe departure.",
+  primaryCta: "Start Your File",
+  secondaryCta: "Direct WhatsApp Desk",
+  hubLabel: "Dhaka Diplomatic Hub",
+  hubTitle: "Trusted travel & visa desk",
+  hubBody:
+    "Our team orchestrates visa logistics, biometric scheduling, certified translations, hotel vouchers, and multi-destination itineraries with clear follow-through.",
+  hubAddressLabel: "Dhaka, Bangladesh",
+  hubAddressDetail: "Open Saturday to Thursday · WhatsApp-ready support",
+  metrics: [
+    {
+      value: "10,000",
+      suffix: "+",
+      label: "Journeys Planned",
+      hint: "Seamless global departures",
+    },
+    {
+      value: "99.2",
+      suffix: "%",
+      label: "Visa File Success*",
+      hint: "Rigorous dossier curation",
+    },
+    {
+      value: "45",
+      suffix: "+",
+      label: "Destination Countries",
+      hint: "Popular outbound routes",
+    },
+    {
+      value: "24/7",
+      suffix: "",
+      label: "Dhaka Support Desk",
+      hint: "Real-time WhatsApp hotline",
+    },
+  ],
+  metricsNote:
+    "*Success reflects correctly prepared files we support — final visa decisions rest with embassies.",
 } as const;
 
 export const servicesHome = {
-  kicker: "OUR SERVICES",
+  kicker: "Our Services",
   title: "Everything you need to travel with clarity.",
-  body: "One partner for tickets, paperwork, and the journey beyond.",
+  body: "Visas, paperwork, packages, and the journey beyond — curated under one roof.",
+  cta: "Custom Service Request",
   items: [
     {
-      id: "air-ticketing",
-      name: "Air Ticketing",
-      excerpt: "Domestic and international flights with clear fare options.",
-      icon: "Plane",
-    },
-    {
       id: "visa-processing",
+      category: "Consular Advisory",
       name: "Visa Processing",
-      excerpt: "Document guidance and submission support by destination.",
+      excerpt:
+        "Tailored document checklists, notarization guidance, biometrics assistance, and embassy submission support by destination.",
       icon: "FileCheck",
     },
     {
       id: "tour-packages",
+      category: "Curated Itineraries",
       name: "Tour Packages",
-      excerpt: "Curated trips with hotels, transfers, and on-ground support.",
+      excerpt:
+        "Private and group holiday experiences with vetted hotels, transfers, and English-speaking local guides.",
       icon: "Map",
     },
     {
       id: "umrah-hajj",
+      category: "Spiritual Pilgrimages",
       name: "Umrah & Hajj",
-      excerpt: "Spiritual journeys planned with care and clear checklists.",
+      excerpt:
+        "Devoted journeys planned with care: accommodation guidance, Nusuk clearances, and escorted support in Makkah and Madinah.",
       icon: "Mosque",
     },
     {
       id: "work-permit",
+      category: "Employment Clearance",
       name: "Work Permit",
-      excerpt: "Overseas employment paperwork handled with diligence.",
+      excerpt:
+        "Diligent handling of overseas employment documentation, BMET clearances, attestation, and immigration compliance.",
       icon: "Briefcase",
     },
     {
       id: "hotel-booking",
+      category: "Hospitality Sourcing",
       name: "Hotel Booking",
-      excerpt: "Stays matched to your budget, dates, and destination.",
+      excerpt:
+        "Pre-screened stays matching your budget and location — with vouchers suitable for embassy submission.",
       icon: "Hotel",
     },
     {
       id: "travel-insurance",
+      category: "Risk Management",
       name: "Travel Insurance",
-      excerpt: "Coverage options so you travel with peace of mind.",
+      excerpt:
+        "Medical and baggage coverage options that satisfy common consular requirements for worry-free travel.",
       icon: "Shield",
     },
     {
       id: "airport-transfer",
+      category: "Ground Fleet",
       name: "Airport Transfer",
-      excerpt: "Reliable pickups and drop-offs when you land or leave.",
+      excerpt:
+        "Reliable chauffeur pickups and drop-offs when you land or leave — coordinated with your itinerary.",
       icon: "Car",
     },
     {
       id: "consultation",
+      category: "Strategic Planning",
       name: "Travel Consultation",
-      excerpt: "Honest advice on routes, visas, and timing before you book.",
+      excerpt:
+        "Honest advice on routes, seasonal timing, visa lead times, and eligibility before you commit.",
       icon: "MessageCircle",
     },
   ],
 } as const;
 
 export const destinationsHome = {
-  kicker: "POPULAR DESTINATIONS",
+  kicker: "Curated Portals",
   title: "Where Bangladesh travelers go next.",
-  body: "Featured routes today — more destinations can be added as you grow.",
+  body: "Top routes for vacationers, business travelers, and spiritual journeys.",
+  filters: [
+    { id: "all", label: "All" },
+    { id: "se-asia", label: "Southeast Asia" },
+    { id: "middle-east", label: "Middle East" },
+    { id: "europe-asia", label: "Europe / Asia" },
+    { id: "regional", label: "Regional" },
+  ],
   items: [
-    { name: "Malaysia", country: "Malaysia", tone: "#0b3d4a" },
-    { name: "Thailand", country: "Thailand", tone: "#1a3a5c" },
-    { name: "Singapore", country: "Singapore", tone: "#12263a" },
-    { name: "UAE", country: "United Arab Emirates", tone: "#0f2f3a" },
-    { name: "Saudi Arabia", country: "Saudi Arabia", tone: "#1c2e24" },
-    { name: "India", country: "India", tone: "#2a1f18" },
-    { name: "Maldives", country: "Maldives", tone: "#0d3b4d" },
-    { name: "Turkey", country: "Turkey", tone: "#2a1820" },
-    { name: "Azerbaijan", country: "Azerbaijan", tone: "#1a2740" },
-    { name: "Georgia", country: "Georgia", tone: "#243044" },
+    {
+      name: "Malaysia",
+      region: "se-asia",
+      badge: "SE Asia",
+      places: "Kuala Lumpur · Penang · Langkawi",
+      fromPrice: "From BDT 42,000",
+      image:
+        "https://images.unsplash.com/photo-1596422846543-75c6fc764821?auto=format&fit=crop&w=900&q=80",
+      tone: "#0b3d4a",
+    },
+    {
+      name: "Thailand",
+      region: "se-asia",
+      badge: "SE Asia",
+      places: "Bangkok · Phuket · Pattaya",
+      fromPrice: "From BDT 48,000",
+      image:
+        "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=900&q=80",
+      tone: "#1a3a5c",
+    },
+    {
+      name: "Singapore",
+      region: "se-asia",
+      badge: "Urban Luxe",
+      places: "Marina Bay · Sentosa Island",
+      fromPrice: "From BDT 65,000",
+      image:
+        "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=900&q=80",
+      tone: "#12263a",
+    },
+    {
+      name: "UAE",
+      region: "middle-east",
+      badge: "Middle East",
+      places: "Dubai · Abu Dhabi · Sharjah",
+      fromPrice: "From BDT 72,000",
+      image:
+        "https://images.unsplash.com/photo-1512453979798-5ea833fcd8bb?auto=format&fit=crop&w=900&q=80",
+      tone: "#0f2f3a",
+    },
+    {
+      name: "Saudi Arabia",
+      region: "middle-east",
+      badge: "Pilgrimage",
+      places: "Makkah · Madinah · Jeddah",
+      fromPrice: "From BDT 95,000",
+      image:
+        "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=900&q=80",
+      tone: "#1c2e24",
+    },
+    {
+      name: "India",
+      region: "regional",
+      badge: "Regional",
+      places: "Kolkata · Delhi · Chennai · Goa",
+      fromPrice: "From BDT 18,500",
+      image:
+        "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=900&q=80",
+      tone: "#2a1f18",
+    },
+    {
+      name: "Maldives",
+      region: "se-asia",
+      badge: "Islands",
+      places: "North Malé · Private Atolls",
+      fromPrice: "From BDT 85,000",
+      image:
+        "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=900&q=80",
+      tone: "#0d3b4d",
+    },
+    {
+      name: "Turkey",
+      region: "europe-asia",
+      badge: "Eurasia",
+      places: "Istanbul · Cappadocia · Antalya",
+      fromPrice: "From BDT 89,000",
+      image:
+        "https://images.unsplash.com/photo-1541432901042-2d8bd64b4a9b?auto=format&fit=crop&w=900&q=80",
+      tone: "#2a1820",
+    },
+    {
+      name: "Azerbaijan",
+      region: "europe-asia",
+      badge: "Caucasus",
+      places: "Baku · Shahdag",
+      fromPrice: "From BDT 56,000",
+      image:
+        "https://images.unsplash.com/photo-1601665748403-0c3f4c4e0c8f?auto=format&fit=crop&w=900&q=80",
+      tone: "#1a2740",
+    },
+    {
+      name: "Georgia",
+      region: "europe-asia",
+      badge: "Europe / Asia",
+      places: "Tbilisi · Kazbegi · Batumi",
+      fromPrice: "From BDT 68,000",
+      image:
+        "https://images.unsplash.com/photo-1565008576549-57569a493712?auto=format&fit=crop&w=900&q=80",
+      tone: "#243044",
+    },
   ],
 } as const;
 
 export const toursHome = {
-  kicker: "TOUR PACKAGES",
+  kicker: "Signature Collections",
   title: "Trips shaped around how you want to arrive.",
-  body: "Starting points — enquire for current dates and availability.",
+  body: "Starting points — enquire for current season dates and availability.",
+  cta: "View All & Enquire",
   items: [
     {
       id: "kl-escape",
       name: "Kuala Lumpur Escape",
+      duration: "4 Nights · 5 Days",
+      badge: "All-Inclusive Land",
       destination: "Malaysia",
-      duration: "4D / 3N",
       startingPrice: 45000,
       currency: "BDT" as const,
-      excerpt: "City highlights, shopping, and easy transfers from Dhaka.",
-      image: brand.assets.hero.frameNight,
+      excerpt:
+        "City highlights, Bukit Bintang shopping, Batu Caves day tour, and chauffeured airport transfers.",
+      perks: [
+        "4-Star downtown hotel + breakfast",
+        "Private airport transfers included",
+        "Malaysia eVisa assistance",
+      ],
+      image:
+        "https://images.unsplash.com/photo-1596422846543-75c6fc764821?auto=format&fit=crop&w=1200&q=80",
     },
     {
       id: "bangkok-pulse",
       name: "Bangkok City Pulse",
+      duration: "5 Nights · 6 Days",
+      badge: "Bestseller",
       destination: "Thailand",
-      duration: "5D / 4N",
       startingPrice: 52000,
       currency: "BDT" as const,
-      excerpt: "Temples, markets, and a paced itinerary for first-timers.",
-      image: brand.assets.hero.frameWing,
+      excerpt:
+        "Grand Palace temples, floating markets, Thai cuisine, and a paced itinerary for first-timers.",
+      perks: [
+        "Sukhumvit premium stay + breakfast",
+        "Chao Phraya dinner cruise",
+        "Thai tourist visa processing",
+      ],
+      image:
+        "https://images.unsplash.com/photo-1508009603885-50cf7c579365?auto=format&fit=crop&w=1200&q=80",
     },
     {
       id: "dubai-lights",
       name: "Dubai Lights",
+      duration: "4 Nights · 5 Days",
+      badge: "Executive Tier",
       destination: "UAE",
-      duration: "5D / 4N",
       startingPrice: 78000,
       currency: "BDT" as const,
-      excerpt: "Skyline views, desert evening, and airport support included.",
-      image: brand.assets.hero.frameArrival,
+      excerpt:
+        "Skyline views, desert dune safari with banquet, marina cruise, and airport concierge support.",
+      perks: [
+        "5-Star Business Bay hotel",
+        "Premium desert safari",
+        "UAE visit visa assistance",
+      ],
+      image:
+        "https://images.unsplash.com/photo-1512453979798-5ea833fcd8bb?auto=format&fit=crop&w=1200&q=80",
     },
   ],
 } as const;
 
 export const visaHome = {
-  kicker: "VISA ASSISTANCE",
+  kicker: "Consular Precision",
   title: "Clear guidance for the countries you need.",
-  body: "We support documentation and process — never a promise of guaranteed approval.",
+  body: "We vet bank statements, invitations, and supporting documents before submission — never a promise of guaranteed approval.",
   disclaimer:
     "Visa decisions rest with the issuing authority. Vistora helps you prepare and submit correctly.",
   items: [
     {
       country: "Malaysia",
-      name: "Tourist & employment pathways",
-      excerpt: "Checklist, appointment support, and follow-up on your file.",
+      flag: "🇲🇾",
+      turnaround: "2–4 Working Days",
+      excerpt:
+        "Tourist eVisa and employment pass pathways with checklist-led file preparation.",
+      checks: [
+        "Valid passport (min. 6 months)",
+        "Bank solvency & statement",
+        "Hotel / itinerary proof",
+      ],
     },
     {
       country: "UAE",
-      name: "Visit & work documentation",
-      excerpt: "Paperwork structured for embassies and employers.",
+      flag: "🇦🇪",
+      turnaround: "24–48 Hours",
+      excerpt:
+        "30 / 60 / 90-day visit permits and employment residency document pre-checks.",
+      checks: [
+        "Clear colour passport scan",
+        "White-background digital photo",
+        "National ID / supporting IDs",
+      ],
     },
     {
       country: "Saudi Arabia",
-      name: "Visit, Umrah & related visas",
-      excerpt: "Requirements mapped before you submit.",
+      flag: "🇸🇦",
+      turnaround: "1–3 Working Days",
+      excerpt:
+        "Visit visas, Umrah e-visas via Nusuk, and commercial multi-entry guidance.",
+      checks: [
+        "Original passport",
+        "Meningitis vaccination certificate",
+        "Nusuk appointment support",
+      ],
     },
     {
       country: "Thailand",
-      name: "Tourist visa support",
-      excerpt: "Forms, photos, and travel proof prepared carefully.",
+      flag: "🇹🇭",
+      turnaround: "4–6 Working Days",
+      excerpt:
+        "Royal Thai Embassy Dhaka sticker visa — tourist and medical tourism files.",
+      checks: [
+        "Bank statement meeting embassy norms",
+        "Employer NOC / trade license & TIN",
+        "Confirmed hotel vouchers",
+      ],
     },
     {
       country: "Singapore",
-      name: "Visit visa guidance",
-      excerpt: "Document review so incomplete files don’t slow you down.",
+      flag: "🇸🇬",
+      turnaround: "3–5 Working Days",
+      excerpt:
+        "e-Visa filing support through authorised channels with careful document review.",
+      checks: [
+        "Form 14A duly signed",
+        "Letter of introduction where required",
+        "Detailed day-wise travel plan",
+      ],
     },
     {
       country: "Turkey",
-      name: "e-Visa & visit support",
-      excerpt: "Practical steps for popular leisure routes.",
+      flag: "🇹🇷",
+      turnaround: "Sticker / e-Visa",
+      excerpt:
+        "e-Visa support for eligible passport holders and full embassy dossier prep.",
+      checks: [
+        "Supporting OECD / Schengen visa if needed",
+        "Biometric photos (50×50mm)",
+        "Travel health insurance policy",
+      ],
     },
   ],
 } as const;
 
 export const whyHome = {
-  kicker: "WHY CHOOSE VISTORA",
+  kicker: "The Vistora Standard",
   title: "Practical help. Personal follow-through.",
+  body: "We replace call-center friction with single-point accountability.",
   items: [
     {
       title: "One consultant, one file",
-      body: "You speak to someone who knows your case — not a revolving inbox.",
+      body: "A named officer manages your case from enquiry to departure — not a revolving inbox.",
+      icon: "UserCheck",
     },
     {
-      title: "Tickets to permits",
-      body: "Air tickets, visas, work permits, and tours under one roof in Dhaka.",
+      title: "Visas to permits",
+      body: "Embassy visas, work permits, tours, and Umrah under one coordinated desk in Dhaka.",
+      icon: "FileStack",
     },
     {
       title: "Honest timelines",
-      body: "We explain what is in our control — and what depends on embassies or airlines.",
+      body: "Transparent consular processing days — we never promise impossible embassy speedruns.",
+      icon: "Hourglass",
     },
     {
       title: "WhatsApp-ready support",
-      body: "Fast answers when you need an update before you travel.",
+      body: "Checklists, draft reviews, and status updates straight to your messaging inbox.",
+      icon: "MessageCircle",
     },
   ],
 } as const;
 
 export const howHome = {
-  kicker: "HOW IT WORKS",
+  kicker: "Transparent Execution",
   title: "From first message to departure.",
+  body: "Four clear stages for documentation and travel planning.",
   steps: [
     {
       index: "01",
       title: "Contact",
-      body: "Share your destination, dates, and service need via form or WhatsApp.",
+      body: "Share your destination, dates, and service need via form, phone, or WhatsApp.",
+      icon: "Send",
     },
     {
       index: "02",
       title: "Plan",
-      body: "We map tickets, visas, or packages around your budget and timeline.",
+      body: "We map visa dossiers, packages, or permits around your budget and timeline.",
+      icon: "Map",
     },
     {
       index: "03",
       title: "Confirm",
-      body: "Documents, payments, and bookings are locked with clear next steps.",
+      body: "Documents undergo compliance checks, payments are receipted, and dates are secured.",
+      icon: "Lock",
     },
     {
       index: "04",
       title: "Travel",
-      body: "You depart knowing who to call if anything shifts on the day.",
+      body: "Depart with clarity — and a dedicated contact if rules or schedules shift.",
+      icon: "Plane",
     },
   ],
 } as const;
 
 export const reviewsHome = {
-  kicker: "TRAVELER NOTES",
-  title: "What clients say after the stamp and the boarding pass.",
+  kicker: "Verified Travelers",
+  title: "Trusted by travelers from Dhaka.",
+  body: "Real experiences from families, pilgrims, and corporate executives.",
+  ratingLabel: "5.0 / 5.0 Rating",
   items: [
     {
-      author: "Rahim H.",
-      country: "Malaysia",
+      author: "Tanvir Hossain",
+      meta: "Dhaka · Malaysia Family Vacation",
+      initials: "TH",
       quote:
-        "Visa documents were checked twice before submission. No last-minute surprises.",
+        "Vistora managed our family Malaysia tour without a single hiccup. Hotel vouchers were accepted instantly and transfers were on time.",
       rating: 5,
     },
     {
-      author: "Nusrat A.",
-      country: "UAE",
+      author: "Rubina Akhter",
+      meta: "Gulshan · Dubai Corporate Visit",
+      initials: "RA",
       quote:
-        "Ticket and hotel were sorted in one conversation. Clear pricing from the start.",
+        "Securing the Dubai multiple-entry visit for our management delegation was handled with absolute professionalism.",
       rating: 5,
     },
     {
-      author: "Karim S.",
-      country: "Saudi Arabia",
+      author: "Farid Ahmed",
+      meta: "Uttara · Umrah Premium Package",
+      initials: "FA",
       quote:
-        "Umrah planning felt organised. They stayed reachable on WhatsApp throughout.",
+        "Our elderly parents completed Umrah through Vistora. Proximity to the Haram in Madinah and wheelchair assistance was a true blessing.",
       rating: 5,
     },
-  ],
-} as const;
-
-export const galleryHome = {
-  kicker: "GALLERY",
-  title: "Moments from the journey.",
-  images: [
-    { src: brand.assets.hero.frameStart, alt: "View from the cabin window" },
-    { src: brand.assets.hero.frameWing, alt: "Wing above the clouds" },
-    { src: brand.assets.hero.frameClouds, alt: "Descending through cloud" },
-    { src: brand.assets.hero.frameNight, alt: "Night sky over the city" },
-    { src: brand.assets.hero.frameArrival, alt: "Paris revealed" },
-    { src: brand.assets.hero.frameStart, alt: "Ready for departure" },
   ],
 } as const;
 
 export const inquiryHome = {
-  kicker: "ENQUIRE",
+  kicker: "Direct Desk",
   title: "Tell us how you want to travel.",
-  body: "Share a few details — a Vistora consultant will follow up.",
+  body: "Whether you need embassy document validation, a family holiday package, or work-permit guidance — our Dhaka desk responds within hours.",
   serviceOptions: [
-    "Air Ticketing",
-    "Visa Processing",
-    "Tour Packages",
-    "Umrah & Hajj",
-    "Work Permit",
-    "Hotel Booking",
+    "Visa Processing & File Preparation",
+    "Holiday Tour Package",
+    "Umrah & Hajj Spiritual Journey",
+    "Work Permit & Employment Clearance",
+    "Hotel Booking & Airport Transfer",
     "Travel Insurance",
-    "Airport Transfer",
-    "Travel Consultation",
+    "General Travel Consultation",
     "Other",
   ],
   successTitle: "Thank you — we received your enquiry.",
   successBody:
-    "Our team will contact you shortly. For faster help, message us on WhatsApp.",
+    "A consultant will review your details and connect shortly. For faster help, message us on WhatsApp.",
+  privacy:
+    "Your details are handled with care for travel and consular follow-up only.",
 } as const;
 
 export const footerHome = {
   blurb:
-    "Vistora Tours & Travels — air tickets, visas, work permits, tours, and Umrah & Hajj from Dhaka.",
+    "Your dedicated travel and visa consultancy partner from Dhaka — visas, work permits, tours, and Umrah & Hajj with discreet follow-through.",
   licenses: "Licenses & registrations available on request.",
-  copyright: `© ${new Date().getFullYear()} ${brand.legalName}. All rights reserved.`,
+  copyright: `© ${new Date().getFullYear()} Vistora Tours & Travels. All rights reserved.`,
 } as const;
