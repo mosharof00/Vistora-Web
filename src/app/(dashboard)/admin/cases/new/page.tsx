@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 export default async function NewCasePage({
   searchParams,
 }: {
-  searchParams: Promise<{ batch?: string; order?: string }>;
+  searchParams: Promise<{ batch?: string; order?: string; candidate?: string }>;
 }) {
   const params = await searchParams;
   const supabase = await createClient();
@@ -39,6 +39,11 @@ export default async function NewCasePage({
       .order("full_name"),
   ]);
 
+  const candidateOptions = (candidates ?? []).map((c) => ({
+    id: c.id,
+    label: `${c.candidate_code} — ${c.full_name}`,
+  }));
+
   const batchOptions = (batches ?? []).map((b) => {
     const order = b.job_orders as { order_code: string } | null;
     return {
@@ -65,21 +70,25 @@ export default async function NewCasePage({
     batchOptions[0]?.jobOrderId ??
     "";
 
+  const prefillCandidate =
+    params.candidate &&
+    candidateOptions.some((c) => c.id === params.candidate)
+      ? params.candidate
+      : "";
+
   return (
     <div className="mx-auto max-w-3xl space-y-6">
       <div>
         <PageBackLink href="/admin/cases" label="Back to cases" />
-        <h1 className="text-2xl font-semibold tracking-tight">Add case</h1>
+        <h1 className="mt-1 text-2xl font-semibold tracking-tight">Add case</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           Place a candidate into a visa batch to start processing.
         </p>
       </div>
       <CandidateCaseForm
         mode="create"
-        candidates={(candidates ?? []).map((c) => ({
-          id: c.id,
-          label: `${c.candidate_code} — ${c.full_name}`,
-        }))}
+        basePath="/admin/cases"
+        candidates={candidateOptions}
         batches={batchOptions}
         agents={(agents ?? []).map((a) => ({
           id: a.id,
@@ -91,7 +100,7 @@ export default async function NewCasePage({
         }))}
         defaultValues={{
           caseCode: "",
-          candidateId: "",
+          candidateId: prefillCandidate,
           visaBatchId: prefillBatch || batchOptions[0]?.id || "",
           jobOrderId: prefillJobOrder,
           agentId: "",

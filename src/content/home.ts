@@ -133,8 +133,7 @@ export const destinationsHome = {
       badge: "SE Asia",
       places: "Kuala Lumpur · Penang · Langkawi",
       fromPrice: "From BDT 42,000",
-      image:
-        "https://images.unsplash.com/photo-1596422846543-75c6fc764821?auto=format&fit=crop&w=900&q=80",
+      image: "/marketing/destinations/malaysia.jpg",
       tone: "#0b3d4a",
     },
     {
@@ -143,8 +142,7 @@ export const destinationsHome = {
       badge: "SE Asia",
       places: "Bangkok · Phuket · Pattaya",
       fromPrice: "From BDT 48,000",
-      image:
-        "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=900&q=80",
+      image: "/marketing/destinations/thailand.jpg",
       tone: "#1a3a5c",
     },
     {
@@ -153,8 +151,7 @@ export const destinationsHome = {
       badge: "Urban Luxe",
       places: "Marina Bay · Sentosa Island",
       fromPrice: "From BDT 65,000",
-      image:
-        "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=900&q=80",
+      image: "/marketing/destinations/singapore.jpg",
       tone: "#12263a",
     },
     {
@@ -163,8 +160,7 @@ export const destinationsHome = {
       badge: "Middle East",
       places: "Dubai · Abu Dhabi · Sharjah",
       fromPrice: "From BDT 72,000",
-      image:
-        "https://images.unsplash.com/photo-1512453979798-5ea833fcd8bb?auto=format&fit=crop&w=900&q=80",
+      image: "/marketing/destinations/uae.jpg",
       tone: "#0f2f3a",
     },
     {
@@ -173,8 +169,7 @@ export const destinationsHome = {
       badge: "Pilgrimage",
       places: "Makkah · Madinah · Jeddah",
       fromPrice: "From BDT 95,000",
-      image:
-        "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=900&q=80",
+      image: "/marketing/destinations/saudi.jpg",
       tone: "#1c2e24",
     },
     {
@@ -183,8 +178,7 @@ export const destinationsHome = {
       badge: "Regional",
       places: "Kolkata · Delhi · Chennai · Goa",
       fromPrice: "From BDT 18,500",
-      image:
-        "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=900&q=80",
+      image: "/marketing/destinations/india.jpg",
       tone: "#2a1f18",
     },
     {
@@ -193,8 +187,7 @@ export const destinationsHome = {
       badge: "Islands",
       places: "North Malé · Private Atolls",
       fromPrice: "From BDT 85,000",
-      image:
-        "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=900&q=80",
+      image: "/marketing/destinations/maldives.jpg",
       tone: "#0d3b4d",
     },
     {
@@ -203,8 +196,7 @@ export const destinationsHome = {
       badge: "Eurasia",
       places: "Istanbul · Cappadocia · Antalya",
       fromPrice: "From BDT 89,000",
-      image:
-        "https://images.unsplash.com/photo-1541432901042-2d8bd64b4a9b?auto=format&fit=crop&w=900&q=80",
+      image: "/marketing/destinations/turkey.jpg",
       tone: "#2a1820",
     },
     {
@@ -213,8 +205,7 @@ export const destinationsHome = {
       badge: "Caucasus",
       places: "Baku · Shahdag",
       fromPrice: "From BDT 56,000",
-      image:
-        "https://images.unsplash.com/photo-1601665748403-0c3f4c4e0c8f?auto=format&fit=crop&w=900&q=80",
+      image: "/marketing/destinations/azerbaijan.jpg",
       tone: "#1a2740",
     },
     {
@@ -223,8 +214,7 @@ export const destinationsHome = {
       badge: "Europe / Asia",
       places: "Tbilisi · Kazbegi · Batumi",
       fromPrice: "From BDT 68,000",
-      image:
-        "https://images.unsplash.com/photo-1565008576549-57569a493712?auto=format&fit=crop&w=900&q=80",
+      image: "/marketing/destinations/georgia.jpg",
       tone: "#243044",
     },
   ],
@@ -251,8 +241,7 @@ export const toursHome = {
         "Private airport transfers included",
         "Malaysia eVisa assistance",
       ],
-      image:
-        "https://images.unsplash.com/photo-1596422846543-75c6fc764821?auto=format&fit=crop&w=1200&q=80",
+      image: "/marketing/tours/kl.jpg",
     },
     {
       id: "bangkok-pulse",
@@ -269,8 +258,7 @@ export const toursHome = {
         "Chao Phraya dinner cruise",
         "Thai tourist visa processing",
       ],
-      image:
-        "https://images.unsplash.com/photo-1508009603885-50cf7c579365?auto=format&fit=crop&w=1200&q=80",
+      image: "/marketing/tours/bangkok.jpg",
     },
     {
       id: "dubai-lights",
@@ -287,8 +275,7 @@ export const toursHome = {
         "Premium desert safari",
         "UAE visit visa assistance",
       ],
-      image:
-        "https://images.unsplash.com/photo-1512453979798-5ea833fcd8bb?auto=format&fit=crop&w=1200&q=80",
+      image: "/marketing/tours/dubai.jpg",
     },
   ],
 } as const;

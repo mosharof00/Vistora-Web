@@ -6,6 +6,12 @@ import { cn } from "@/lib/utils";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
+/**
+ * Trigger once the block has risen higher in the viewport,
+ * so the animation is still visible (not finished at the bottom edge).
+ */
+const VIEW_MARGIN = "0px 0px -42% 0px";
+
 type Direction = "up" | "down" | "left" | "right" | "fade" | "scale";
 
 function offsetFor(direction: Direction, distance: number) {
@@ -19,7 +25,7 @@ function offsetFor(direction: Direction, distance: number) {
     case "fade":
       return { x: 0, y: 0 };
     case "scale":
-      return { x: 0, y: 12 };
+      return { x: 0, y: 14 };
     case "up":
     default:
       return { x: 0, y: distance };
@@ -32,7 +38,7 @@ export function Reveal({
   delay = 0,
   direction = "up",
   distance = 36,
-  duration = 0.75,
+  duration = 0.9,
 }: {
   children: ReactNode;
   className?: string;
@@ -42,7 +48,11 @@ export function Reveal({
   duration?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-10% 0px -8% 0px" });
+  const inView = useInView(ref, {
+    once: true,
+    margin: VIEW_MARGIN,
+    amount: 0.2,
+  });
   const from = offsetFor(direction, distance);
 
   return (
@@ -69,21 +79,25 @@ export function Reveal({
 export function Stagger({
   children,
   className,
-  stagger = 0.09,
+  stagger = 0.12,
+  delayChildren = 0.08,
 }: {
   children: ReactNode;
   className?: string;
   stagger?: number;
+  delayChildren?: number;
 }) {
   return (
     <motion.div
       className={className}
       initial="hidden"
       whileInView="show"
-      viewport={{ once: true, margin: "-8% 0px" }}
+      viewport={{ once: true, margin: VIEW_MARGIN, amount: 0.12 }}
       variants={{
         hidden: {},
-        show: { transition: { staggerChildren: stagger, delayChildren: 0.06 } },
+        show: {
+          transition: { staggerChildren: stagger, delayChildren },
+        },
       }}
     >
       {children}
@@ -96,11 +110,13 @@ export function StaggerItem({
   className,
   direction = "up",
   distance = 28,
+  duration = 0.95,
 }: {
   children: ReactNode;
   className?: string;
   direction?: Direction;
   distance?: number;
+  duration?: number;
 }) {
   const from = offsetFor(direction, distance);
 
@@ -118,7 +134,7 @@ export function StaggerItem({
           x: 0,
           y: 0,
           scale: 1,
-          transition: { duration: 0.65, ease },
+          transition: { duration, ease },
         },
       }}
     >

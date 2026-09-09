@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
 import { NextResponse, type NextRequest } from "next/server";
 
-import { requireRole } from "@/lib/auth/get-user";
+import { getAuthedUser } from "@/lib/auth/get-user";
 import {
   acceptKindForSlot,
   bucketForOwner,
@@ -71,7 +71,10 @@ function acceptForDocType(docType: string): DocAcceptKind {
  */
 export async function POST(request: NextRequest) {
   try {
-    const { user } = await requireRole("admin");
+    const { user, role } = await getAuthedUser();
+    if (!user || (role !== "admin" && role !== "staff")) {
+      return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+    }
     const formData = await request.formData();
 
     const ownerTypeRaw = String(formData.get("ownerType") ?? "");

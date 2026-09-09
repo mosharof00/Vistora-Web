@@ -50,6 +50,7 @@ export function CandidateCaseForm({
   batches,
   agents,
   staff,
+  basePath = "/admin/cases",
 }: {
   mode: "create" | "edit";
   caseId?: string;
@@ -58,6 +59,7 @@ export function CandidateCaseForm({
   batches: BatchOption[];
   agents: Option[];
   staff: Option[];
+  basePath?: string;
 }) {
   const [isPending, startTransition] = useTransition();
   const form = useForm<CandidateCaseInput>({
@@ -341,8 +343,8 @@ export function CandidateCaseForm({
               <Link
                 href={
                   mode === "edit" && caseId
-                    ? `/admin/cases/${caseId}`
-                    : "/admin/cases"
+                    ? `${basePath}/${caseId}`
+                    : basePath
                 }
                 className={buttonVariants({ variant: "outline" })}
               >

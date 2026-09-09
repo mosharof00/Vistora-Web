@@ -6,7 +6,7 @@ export const siteConfig = {
   legalName: APP_LEGAL_NAME,
   tagline: "Explore More, Travel Beyond",
   description:
-    "Vistora Tours & Travels is a modern, customer-first travel partner for air tickets, visas, work permits, tours, Umrah & Hajj, and end-to-end travel support.",
+    "Vistora Tours & Travels is a modern travel partner for visas, work permits, tours, Umrah & Hajj, and end-to-end travel support from Dhaka.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
   locale: "en",
   copyrightYear: 2026,

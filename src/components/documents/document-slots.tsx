@@ -21,6 +21,7 @@ export type DocumentFileRow = {
   doc_type: string;
   file_name: string;
   created_at: string;
+  uploaded_by_name?: string | null;
 };
 
 function documentFileUrl(documentId: string, download = false) {
@@ -173,14 +174,21 @@ function DocumentSlotCard({
           </p>
 
           {latest ? (
-            <a
-              href={documentFileUrl(latest.id)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-2 block max-w-full truncate text-left text-xs font-medium text-primary hover:underline"
-            >
-              {latest.file_name}
-            </a>
+            <>
+              <a
+                href={documentFileUrl(latest.id)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 block max-w-full truncate text-left text-xs font-medium text-primary hover:underline"
+              >
+                {latest.file_name}
+              </a>
+              {latest.uploaded_by_name ? (
+                <p className="mt-0.5 text-[11px] text-muted-foreground">
+                  Uploaded by {latest.uploaded_by_name}
+                </p>
+              ) : null}
+            </>
           ) : (
             <p className="mt-2 text-xs text-muted-foreground">
               {dragging

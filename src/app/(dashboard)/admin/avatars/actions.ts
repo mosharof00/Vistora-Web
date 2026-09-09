@@ -79,7 +79,7 @@ export async function uploadCandidatePhoto(
   candidateId: string,
   formData: FormData
 ): Promise<ActionResult> {
-  await requireRole("admin");
+  await requireRole(["admin", "staff"]);
   const file = formData.get("file");
   if (!(file instanceof File)) return { error: "Choose an image." };
   const err = mimeOk(file);
@@ -124,6 +124,8 @@ export async function uploadCandidatePhoto(
 
   revalidatePath(`/admin/candidates/${candidateId}`);
   revalidatePath("/admin/candidates");
+  revalidatePath(`/staff/candidates/${candidateId}`);
+  revalidatePath("/staff/candidates");
   return { ok: true };
 }
 

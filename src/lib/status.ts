@@ -25,6 +25,7 @@ export function statusTone(status: string): StatusTone {
     case "present":
     case "registered":
     case "finalized":
+    case "in":
       return "success";
 
     case "pending":
@@ -37,6 +38,7 @@ export function statusTone(status: string): StatusTone {
     case "ticketed":
     case "late":
     case "half_day":
+    case "out":
       return "warning";
 
     case "rejected":

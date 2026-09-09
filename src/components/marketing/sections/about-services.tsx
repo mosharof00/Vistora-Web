@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  ArrowRight,
   Briefcase,
   Car,
   FileCheck,
@@ -8,15 +9,14 @@ import {
   Landmark,
   Map,
   MessageCircle,
-  Plane,
   Shield,
   type LucideIcon,
 } from "lucide-react";
 import { Reveal, Stagger, StaggerItem } from "@/components/marketing/motion";
+import { getWhatsAppHref } from "@/config/navigation";
 import { aboutHome, servicesHome } from "@/content/home";
 
 const ICONS: Record<string, LucideIcon> = {
-  Plane,
   FileCheck,
   Map,
   Mosque: Landmark,
@@ -28,72 +28,186 @@ const ICONS: Record<string, LucideIcon> = {
 };
 
 export function AboutSection() {
+  const whatsapp = getWhatsAppHref();
+
   return (
-    <section id="about" className="scroll-mt-28 px-5 py-14 md:px-10 md:py-20">
-      <Reveal className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-end lg:gap-16">
-        <div>
-          <p className="text-[11px] tracking-[0.28em] text-zinc-500 uppercase">
-            {aboutHome.kicker}
-          </p>
-          <h2 className="mt-4 font-serif text-[clamp(2rem,4.5vw,3.6rem)] leading-[1.05] font-medium tracking-tight text-zinc-900 text-balance">
-            {aboutHome.title}
-          </h2>
-        </div>
-        <div>
-          <p className="max-w-xl text-[15px] leading-relaxed text-zinc-600">
-            {aboutHome.body}
-          </p>
-          <a
-            href="#contact"
-            className="mt-6 inline-flex text-sm font-medium text-[#03045e] underline-offset-4 hover:underline"
+    <section
+      id="about"
+      className="relative scroll-mt-28 overflow-hidden bg-[#e8e9f4] px-5 py-16 md:px-10 md:py-24"
+    >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute top-0 right-1/4 -z-10 h-96 w-96 rounded-full bg-[#0077b6]/10 blur-3xl"
+      />
+
+      <div className="mx-auto max-w-6xl">
+        <div className="grid items-start gap-10 lg:grid-cols-12 lg:gap-12">
+          <Reveal className="space-y-5 lg:col-span-7" direction="left">
+            <div className="inline-flex items-center gap-2 rounded-full bg-[#dce9ff] px-3 py-1 text-[11px] font-semibold tracking-[0.14em] text-[#006398] uppercase">
+              <span className="h-2 w-2 animate-pulse rounded-full bg-[#0077b6]" />
+              {aboutHome.kicker}
+            </div>
+            <h2 className="font-serif text-[clamp(1.85rem,4.2vw,2.75rem)] leading-[1.15] font-semibold tracking-tight text-[#0b1c30]">
+              {aboutHome.titleLead}{" "}
+              <span className="font-normal text-[#0077b6] italic">
+                {aboutHome.titleAccent}
+              </span>{" "}
+              {aboutHome.titleTrail}
+            </h2>
+            <p className="max-w-2xl text-[17px] leading-relaxed text-[#45464d]">
+              {aboutHome.body}
+            </p>
+            <div className="flex flex-wrap items-center gap-3 pt-1">
+              <a
+                href="#contact"
+                className="inline-flex items-center gap-2 rounded-xl bg-[#03045e] px-5 py-2.5 text-sm font-semibold text-white shadow-md transition hover:-translate-y-0.5 hover:bg-[#0077b6]"
+              >
+                {aboutHome.primaryCta}
+                <ArrowRight size={16} />
+              </a>
+              {whatsapp ? (
+                <a
+                  href={whatsapp}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-[#0b1c30] shadow-sm transition hover:bg-[#eff4ff]"
+                >
+                  <MessageCircle size={18} className="text-[#0077b6]" />
+                  {aboutHome.secondaryCta}
+                </a>
+              ) : null}
+            </div>
+          </Reveal>
+
+          <Reveal
+            className="relative rounded-2xl bg-white p-7 shadow-xl lg:col-span-5"
+            direction="right"
+            delay={0.12}
           >
-            {aboutHome.cta}
-          </a>
+            <div className="flex items-start justify-between gap-4 pb-4">
+              <div>
+                <p className="text-[11px] font-bold tracking-[0.14em] text-[#76777d] uppercase">
+                  {aboutHome.hubLabel}
+                </p>
+                <h3 className="mt-1 text-xl font-semibold text-[#0b1c30]">
+                  {aboutHome.hubTitle}
+                </h3>
+              </div>
+              <div className="grid h-12 w-12 place-items-center rounded-full bg-[#dce9ff] text-[#0077b6]">
+                <Shield size={22} />
+              </div>
+            </div>
+            <p className="text-sm leading-relaxed text-[#45464d]">
+              {aboutHome.hubBody}
+            </p>
+            <div className="mt-5 flex items-center gap-3 rounded-xl bg-[#eff4ff] p-3">
+              <Map size={22} className="shrink-0 text-[#0077b6]" />
+              <div className="text-sm text-[#0b1c30]">
+                <span className="block font-semibold">
+                  {aboutHome.hubAddressLabel}
+                </span>
+                <span className="text-[#45464d]">
+                  {aboutHome.hubAddressDetail}
+                </span>
+              </div>
+            </div>
+          </Reveal>
         </div>
-      </Reveal>
+
+        <Stagger className="mt-14 grid grid-cols-2 gap-4 rounded-2xl bg-white p-6 shadow-sm md:grid-cols-4 md:gap-6 md:p-8">
+          {aboutHome.metrics.map((metric, index) => (
+            <StaggerItem
+              key={metric.label}
+              direction={index % 2 === 0 ? "up" : "scale"}
+            >
+              <div className="space-y-1 text-center md:text-left">
+                <div className="font-serif text-[clamp(1.75rem,3vw,2.5rem)] font-bold tracking-tight text-[#0b1c30]">
+                  {metric.value}
+                  {metric.suffix ? (
+                    <span className="text-[#0077b6]">{metric.suffix}</span>
+                  ) : null}
+                </div>
+                <div className="text-[11px] font-bold tracking-[0.12em] text-[#76777d] uppercase">
+                  {metric.label}
+                </div>
+                <p className="hidden text-sm text-[#45464d] md:block">
+                  {metric.hint}
+                </p>
+              </div>
+            </StaggerItem>
+          ))}
+        </Stagger>
+        <p className="mt-3 text-center text-xs text-[#76777d] md:text-left">
+          {aboutHome.metricsNote}
+        </p>
+      </div>
     </section>
   );
 }
 
 export function ServicesSection() {
   return (
-    <section id="services" className="scroll-mt-28 px-5 py-14 md:px-10 md:py-16">
-      <Reveal className="mb-10 max-w-2xl">
-        <p className="text-[11px] tracking-[0.28em] text-zinc-500 uppercase">
-          {servicesHome.kicker}
-        </p>
-        <h2 className="mt-3 font-serif text-[clamp(1.85rem,4vw,3.2rem)] leading-[1.05] font-medium text-zinc-900">
-          {servicesHome.title}
-        </h2>
-        <p className="mt-3 text-[15px] text-zinc-600">{servicesHome.body}</p>
-      </Reveal>
+    <section
+      id="services"
+      className="scroll-mt-28 bg-[#eff4ff] px-5 py-16 md:px-10 md:py-24"
+    >
+      <div className="mx-auto max-w-6xl">
+        <div className="mb-12 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+          <Reveal className="max-w-xl space-y-2" direction="up">
+            <span className="text-[11px] font-bold tracking-[0.14em] text-[#0077b6] uppercase">
+              {servicesHome.kicker}
+            </span>
+            <h2 className="font-serif text-[clamp(1.85rem,4vw,2.6rem)] font-semibold tracking-tight text-[#0b1c30]">
+              {servicesHome.title}
+            </h2>
+            <p className="text-[15px] text-[#45464d]">{servicesHome.body}</p>
+          </Reveal>
+          <Reveal delay={0.1} direction="right">
+            <a
+              href="#contact"
+              className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#0077b6] transition hover:text-[#0b1c30]"
+            >
+              {servicesHome.cta}
+              <ArrowRight size={16} className="-rotate-45" />
+            </a>
+          </Reveal>
+        </div>
 
-      <Stagger className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {servicesHome.items.map((item) => {
-          const Icon = ICONS[item.icon] ?? Plane;
-          return (
-            <StaggerItem key={item.id}>
-              <article className="group flex h-full flex-col rounded-2xl border border-zinc-900/8 bg-white/70 p-5 transition-transform duration-300 hover:-translate-y-0.5 md:p-6">
-                <span className="grid h-10 w-10 place-items-center rounded-full bg-[#03045e]/8 text-[#03045e]">
-                  <Icon size={18} strokeWidth={1.6} />
-                </span>
-                <h3 className="mt-4 text-lg font-medium tracking-tight text-zinc-900">
-                  {item.name}
-                </h3>
-                <p className="mt-2 flex-1 text-sm leading-relaxed text-zinc-600">
-                  {item.excerpt}
-                </p>
-                <a
-                  href="#contact"
-                  className="mt-5 inline-flex text-sm font-medium text-[#0077b6] underline-offset-4 group-hover:underline"
-                >
-                  Enquire Now
-                </a>
-              </article>
-            </StaggerItem>
-          );
-        })}
-      </Stagger>
+        <Stagger className="grid gap-5 md:grid-cols-2 lg:grid-cols-4" stagger={0.14} delayChildren={0.12}>
+          {servicesHome.items.map((item, index) => {
+            const Icon = ICONS[item.icon] ?? FileCheck;
+            const dir =
+              index % 3 === 0 ? "left" : index % 3 === 1 ? "up" : "right";
+            return (
+              <StaggerItem key={item.id} direction={dir} distance={32} duration={1.05}>
+                <article className="group flex h-full flex-col justify-between rounded-2xl bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+                  <div className="space-y-3">
+                    <div className="grid h-12 w-12 place-items-center rounded-xl bg-[#dce9ff] text-[#0077b6] transition-colors group-hover:bg-[#03045e] group-hover:text-white">
+                      <Icon size={22} strokeWidth={1.6} />
+                    </div>
+                    <span className="inline-block text-[11px] font-bold tracking-[0.12em] text-[#76777d] uppercase">
+                      {item.category}
+                    </span>
+                    <h3 className="text-lg font-semibold text-[#0b1c30]">
+                      {item.name}
+                    </h3>
+                    <p className="text-sm leading-relaxed text-[#45464d]">
+                      {item.excerpt}
+                    </p>
+                  </div>
+                  <a
+                    href="#contact"
+                    className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-[#0077b6] transition-transform group-hover:translate-x-1"
+                  >
+                    Enquire Now
+                    <ArrowRight size={14} />
+                  </a>
+                </article>
+              </StaggerItem>
+            );
+          })}
+        </Stagger>
+      </div>
     </section>
   );
 }

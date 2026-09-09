@@ -1,10 +1,19 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import {
+  ArrowRight,
+  Clock,
+  Mail,
+  MapPin,
+  MessageCircle,
+  Phone,
+  Send,
+} from "lucide-react";
 import { Reveal } from "@/components/marketing/motion";
-import { inquiryHome } from "@/content/home";
 import { getWhatsAppHref } from "@/config/navigation";
 import { siteConfig } from "@/config/site";
+import { inquiryHome } from "@/content/home";
 
 export function InquirySection() {
   const [done, setDone] = useState(false);
@@ -17,134 +26,172 @@ export function InquirySection() {
       form.reportValidity();
       return;
     }
-    // Lead inbox / Supabase wiring comes later — capture UX first.
     setDone(true);
     form.reset();
   }
 
   return (
-    <section id="contact" className="scroll-mt-28 px-5 py-14 md:px-10 md:py-20">
-      <div className="overflow-hidden rounded-[1.6rem] border border-zinc-900/8 bg-white/80">
-        <div className="grid lg:grid-cols-[0.95fr_1.05fr]">
-          <Reveal className="bg-[#0b1524] p-7 text-white md:p-10">
-            <p className="text-[11px] tracking-[0.28em] text-white/55 uppercase">
-              {inquiryHome.kicker}
-            </p>
-            <h2 className="mt-4 font-serif text-[clamp(1.9rem,3.5vw,3rem)] leading-[1.05] font-medium">
-              {inquiryHome.title}
-            </h2>
-            <p className="mt-4 max-w-md text-sm leading-relaxed text-white/70">
-              {inquiryHome.body}
-            </p>
-            <dl className="mt-10 space-y-4 text-sm text-white/75">
-              {siteConfig.contact.phone ? (
-                <div>
-                  <dt className="text-[11px] tracking-[0.18em] text-white/45 uppercase">
-                    Phone
-                  </dt>
-                  <dd className="mt-1">{siteConfig.contact.phone}</dd>
-                </div>
-              ) : null}
-              {siteConfig.contact.email ? (
-                <div>
-                  <dt className="text-[11px] tracking-[0.18em] text-white/45 uppercase">
-                    Email
-                  </dt>
-                  <dd className="mt-1">{siteConfig.contact.email}</dd>
-                </div>
-              ) : null}
-              <div>
-                <dt className="text-[11px] tracking-[0.18em] text-white/45 uppercase">
-                  Office
-                </dt>
-                <dd className="mt-1">
-                  {siteConfig.contact.address || "Dhaka, Bangladesh"}
-                </dd>
-              </div>
-            </dl>
-            {whatsapp ? (
-              <a
-                href={whatsapp}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-8 inline-flex rounded-full bg-white px-5 py-2.5 text-sm font-medium text-zinc-900"
-              >
-                WhatsApp Us
-              </a>
-            ) : null}
-          </Reveal>
-
-          <Reveal delay={0.08} className="p-7 md:p-10">
-            {done ? (
-              <div className="flex h-full min-h-[320px] flex-col justify-center">
-                <h3 className="text-2xl font-medium tracking-tight text-zinc-900">
-                  {inquiryHome.successTitle}
-                </h3>
-                <p className="mt-3 max-w-md text-sm leading-relaxed text-zinc-600">
-                  {inquiryHome.successBody}
+    <section
+      id="contact"
+      className="scroll-mt-28 bg-[#eff4ff] px-5 py-16 md:px-10 md:py-24"
+    >
+      <div className="mx-auto max-w-6xl">
+        <div className="overflow-hidden rounded-2xl bg-white shadow-xl">
+          <div className="grid lg:grid-cols-12">
+            <Reveal
+              className="flex flex-col justify-between space-y-8 bg-[#e5eeff] p-7 md:p-10 lg:col-span-5"
+              direction="left"
+            >
+              <div className="space-y-4">
+                <span className="text-[11px] font-bold tracking-[0.14em] text-[#0077b6] uppercase">
+                  {inquiryHome.kicker}
+                </span>
+                <h2 className="font-serif text-[clamp(1.75rem,3.2vw,2.4rem)] font-semibold tracking-tight text-[#0b1c30]">
+                  {inquiryHome.title}
+                </h2>
+                <p className="text-[15px] leading-relaxed text-[#45464d]">
+                  {inquiryHome.body}
                 </p>
-                <button
-                  type="button"
-                  onClick={() => setDone(false)}
-                  className="mt-8 inline-flex self-start text-sm font-medium text-[#0077b6] underline-offset-4 hover:underline"
-                >
-                  Send another enquiry
-                </button>
+                <div className="space-y-3 pt-2 text-sm text-[#0b1c30]">
+                  <div className="flex items-start gap-2">
+                    <MapPin
+                      size={18}
+                      className="mt-0.5 shrink-0 text-[#0077b6]"
+                    />
+                    <div>
+                      <strong className="block">Dhaka Head Office</strong>
+                      <span className="text-[#45464d]">
+                        {siteConfig.contact.address ||
+                          "Dhaka, Bangladesh"}
+                      </span>
+                    </div>
+                  </div>
+                  {siteConfig.contact.phone ? (
+                    <div className="flex items-center gap-2">
+                      <Phone size={18} className="shrink-0 text-[#0077b6]" />
+                      <span>{siteConfig.contact.phone}</span>
+                    </div>
+                  ) : null}
+                  {siteConfig.contact.email ? (
+                    <div className="flex items-center gap-2">
+                      <Mail size={18} className="shrink-0 text-[#0077b6]" />
+                      <span>{siteConfig.contact.email}</span>
+                    </div>
+                  ) : null}
+                  <div className="flex items-center gap-2">
+                    <Clock size={18} className="shrink-0 text-[#0077b6]" />
+                    <span>Saturday to Thursday · 9:30 AM – 7:30 PM</span>
+                  </div>
+                </div>
               </div>
-            ) : (
-              <form onSubmit={onSubmit} className="grid gap-4 sm:grid-cols-2">
-                <Field label="Full name *" name="name" required />
-                <Field label="Mobile *" name="phone" type="tel" required />
-                <Field label="Email" name="email" type="email" />
-                <Field label="Destination *" name="destination" required />
-                <Field label="Travel date" name="travelDate" type="date" />
-                <Field
-                  label="Travelers"
-                  name="travelers"
-                  type="number"
-                  min={1}
-                />
-                <label className="flex flex-col gap-1.5 sm:col-span-2">
-                  <span className="text-[12px] font-medium text-zinc-700">
-                    Service type
-                  </span>
-                  <select
-                    name="service"
-                    className="h-10 rounded-xl border border-zinc-900/12 bg-white px-3 text-sm text-zinc-900 outline-none focus:border-[#0077b6]"
-                    defaultValue=""
-                  >
-                    <option value="" disabled>
-                      Select a service
-                    </option>
-                    {inquiryHome.serviceOptions.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-                <label className="flex flex-col gap-1.5 sm:col-span-2">
-                  <span className="text-[12px] font-medium text-zinc-700">
-                    Message
-                  </span>
-                  <textarea
-                    name="message"
-                    rows={4}
-                    className="rounded-xl border border-zinc-900/12 bg-white px-3 py-2 text-sm text-zinc-900 outline-none focus:border-[#0077b6]"
-                    placeholder="Tell us dates, travelers, or visa type…"
+
+              {whatsapp ? (
+                <a
+                  href={whatsapp}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group flex items-center justify-between rounded-xl bg-white p-4 shadow-sm transition hover:bg-[#f8f9ff]"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="grid h-10 w-10 place-items-center rounded-full bg-[#5bb8fe]/30 text-[#0077b6]">
+                      <MessageCircle size={18} />
+                    </div>
+                    <div>
+                      <span className="block text-sm font-semibold text-[#0b1c30]">
+                        Chat with an Expert
+                      </span>
+                      <span className="text-xs text-[#76777d]">
+                        Direct WhatsApp hotline
+                      </span>
+                    </div>
+                  </div>
+                  <ArrowRight
+                    size={18}
+                    className="text-[#0077b6] transition-transform group-hover:translate-x-1"
                   />
-                </label>
-                <div className="sm:col-span-2">
+                </a>
+              ) : null}
+            </Reveal>
+
+            <Reveal
+              className="p-7 md:p-10 lg:col-span-7"
+              direction="right"
+              delay={0.1}
+            >
+              {done ? (
+                <div className="flex h-full min-h-[320px] flex-col justify-center">
+                  <h3 className="text-2xl font-semibold tracking-tight text-[#0b1c30]">
+                    {inquiryHome.successTitle}
+                  </h3>
+                  <p className="mt-3 max-w-md text-sm leading-relaxed text-[#45464d]">
+                    {inquiryHome.successBody}
+                  </p>
                   <button
-                    type="submit"
-                    className="inline-flex rounded-full bg-[#03045e] px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#02033f]"
+                    type="button"
+                    onClick={() => setDone(false)}
+                    className="mt-8 inline-flex self-start text-sm font-semibold text-[#0077b6] underline-offset-4 hover:underline"
                   >
-                    Submit enquiry
+                    Send another enquiry
                   </button>
                 </div>
-              </form>
-            )}
-          </Reveal>
+              ) : (
+                <form onSubmit={onSubmit} className="grid gap-4 sm:grid-cols-2">
+                  <Field label="Full name *" name="name" required />
+                  <Field label="Phone *" name="phone" type="tel" required />
+                  <Field label="Email *" name="email" type="email" required />
+                  <Field
+                    label="Destination *"
+                    name="destination"
+                    required
+                    placeholder="e.g. Malaysia, Dubai"
+                  />
+                  <label className="flex flex-col gap-1.5 sm:col-span-2">
+                    <span className="text-sm font-semibold text-[#0b1c30]">
+                      Service type *
+                    </span>
+                    <select
+                      name="service"
+                      required
+                      defaultValue=""
+                      className="h-12 rounded-xl border-0 bg-[#f8f9ff] px-3 text-sm text-[#0b1c30] shadow-sm outline-none focus:bg-[#eff4ff]"
+                    >
+                      <option value="" disabled>
+                        Select service
+                      </option>
+                      {inquiryHome.serviceOptions.map((option) => (
+                        <option key={option} value={option}>
+                          {option}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="flex flex-col gap-1.5 sm:col-span-2">
+                    <span className="text-sm font-semibold text-[#0b1c30]">
+                      Travel details or questions
+                    </span>
+                    <textarea
+                      name="message"
+                      rows={3}
+                      className="rounded-xl border-0 bg-[#f8f9ff] px-3 py-2 text-sm text-[#0b1c30] shadow-sm outline-none focus:bg-[#eff4ff]"
+                      placeholder="Dates, travelers, visa type…"
+                    />
+                  </label>
+                  <div className="sm:col-span-2">
+                    <button
+                      type="submit"
+                      className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#03045e] text-sm font-semibold text-white shadow-md transition hover:bg-[#0077b6]"
+                    >
+                      Submit Travel Inquiry
+                      <Send size={16} />
+                    </button>
+                    <p className="mt-3 text-center text-xs text-[#76777d]">
+                      {inquiryHome.privacy}
+                    </p>
+                  </div>
+                </form>
+              )}
+            </Reveal>
+          </div>
         </div>
       </div>
     </section>
@@ -156,23 +203,23 @@ function Field({
   name,
   type = "text",
   required,
-  min,
+  placeholder,
 }: {
   label: string;
   name: string;
   type?: string;
   required?: boolean;
-  min?: number;
+  placeholder?: string;
 }) {
   return (
     <label className="flex flex-col gap-1.5">
-      <span className="text-[12px] font-medium text-zinc-700">{label}</span>
+      <span className="text-sm font-semibold text-[#0b1c30]">{label}</span>
       <input
         name={name}
         type={type}
         required={required}
-        min={min}
-        className="h-10 rounded-xl border border-zinc-900/12 bg-white px-3 text-sm text-zinc-900 outline-none focus:border-[#0077b6]"
+        placeholder={placeholder}
+        className="h-12 rounded-xl border-0 bg-[#f8f9ff] px-3 text-sm text-[#0b1c30] shadow-sm outline-none focus:bg-[#eff4ff]"
       />
     </label>
   );

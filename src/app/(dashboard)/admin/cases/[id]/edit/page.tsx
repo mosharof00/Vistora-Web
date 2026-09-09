@@ -64,6 +64,7 @@ export default async function EditCasePage({
       <CandidateCaseForm
         mode="edit"
         caseId={caseRow.id}
+        basePath="/admin/cases"
         candidates={(candidates ?? []).map((c) => ({
           id: c.id,
           label: `${c.candidate_code} — ${c.full_name}`,

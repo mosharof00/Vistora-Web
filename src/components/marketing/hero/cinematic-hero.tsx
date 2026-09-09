@@ -9,35 +9,18 @@ import {
   useTransform,
 } from "framer-motion";
 import { HeroCanvas } from "@/components/marketing/hero/hero-canvas";
-import { HeroChrome } from "@/components/marketing/hero/hero-chrome";
 import { HeroChapters } from "@/components/marketing/hero/hero-chapters";
-import { HeroEditorialReveal } from "@/components/marketing/hero/hero-editorial-reveal";
 import { HeroProgress } from "@/components/marketing/hero/hero-progress";
-import type { MarketingAccount } from "@/components/marketing/account-menu";
 import { heroChrome } from "@/content/hero";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 import { chapterIndexFromProgress, heroScrollHeight } from "@/lib/motion";
 
-const navTargets: Record<string, number | string> = {
-  home: 0,
-  about: "#about",
-  services: "#services",
-  tours: "#tours",
-  visa: "#visa",
-  contact: "#contact",
-};
-
-type CinematicHeroProps = {
-  account: MarketingAccount | null;
-};
-
-export function CinematicHero({ account }: CinematicHeroProps) {
+export function CinematicHero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const compact = useMediaQuery("(max-width: 768px)");
   const reduced = usePrefersReducedMotion();
   const [chapter, setChapter] = useState(0);
-  const [activeId, setActiveId] = useState("home");
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -63,22 +46,11 @@ export function CinematicHero({ account }: CinematicHeroProps) {
     document.querySelector(selector)?.scrollIntoView({ behavior: "smooth" });
   }
 
-  function onNavigate(id: string) {
-    setActiveId(id);
-    const target = navTargets[id];
-    if (typeof target === "number") {
-      scrollToProgress(target);
-      return;
-    }
-    if (typeof target === "string") scrollToSelector(target);
-  }
-
   function onCta(target: "next" | "services") {
     if (target === "next") {
       scrollToProgress(0.18);
       return;
     }
-    setActiveId("services");
     scrollToSelector("#services");
   }
 
@@ -100,11 +72,6 @@ export function CinematicHero({ account }: CinematicHeroProps) {
           className="object-cover"
         />
         <div className="absolute inset-0 bg-black/45" />
-        <HeroChrome
-          activeId={activeId}
-          account={account}
-          onNavigate={onNavigate}
-        />
         <div className="absolute top-[28%] left-1/2 z-20 w-[min(calc(100%-2.5rem),36rem)] -translate-x-1/2 text-center">
           <p className="mb-5 text-[11px] tracking-[0.28em] text-white/70">
             PARIS  /  48.8566° N
@@ -113,8 +80,8 @@ export function CinematicHero({ account }: CinematicHeroProps) {
             Paris begins before you land.
           </h1>
           <p className="mx-auto mt-4 max-w-md text-sm text-white/80 md:text-base">
-            Air tickets, visas, and work permits — arranged by Vistora before
-            you leave the ground.
+            Visas and work permits — arranged by Vistora before you leave the
+            ground.
           </p>
         </div>
       </section>
@@ -132,11 +99,6 @@ export function CinematicHero({ account }: CinematicHeroProps) {
         <HeroCanvas progress={scrollYProgress} />
 
         <motion.div className="absolute inset-0 z-20" style={{ opacity: chromeFade }}>
-          <HeroChrome
-            activeId={activeId}
-            account={account}
-            onNavigate={onNavigate}
-          />
           <HeroChapters
             progress={scrollYProgress}
             onCta={onCta}
@@ -156,8 +118,6 @@ export function CinematicHero({ account }: CinematicHeroProps) {
             <span className="h-10 w-px bg-white/45" />
           </motion.div>
         </motion.div>
-
-        <HeroEditorialReveal progress={scrollYProgress} />
       </div>
     </section>
   );

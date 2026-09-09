@@ -9,26 +9,28 @@ export function MarketingFooter() {
   const facebook = siteConfig.contact.facebook;
 
   return (
-    <footer className="mt-4 border-t border-zinc-900/8 px-5 py-12 md:px-10 md:py-16">
-      <div className="grid gap-10 md:grid-cols-[1.2fr_0.8fr_0.8fr]">
-        <div>
+    <footer className="border-t border-[#c6c6cd]/40 bg-white px-5 pt-14 pb-10 md:px-10">
+      <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-2 lg:grid-cols-12">
+        <div className="space-y-4 lg:col-span-4">
           <SiteLogo />
-          <p className="mt-4 max-w-sm text-sm leading-relaxed text-zinc-600">
+          <p className="max-w-sm text-sm leading-relaxed text-[#45464d]">
             {footerHome.blurb}
           </p>
-          <p className="mt-3 text-sm text-zinc-500">{siteConfig.tagline}</p>
+          <p className="text-sm font-medium text-[#0077b6]">
+            {siteConfig.tagline}
+          </p>
         </div>
 
-        <div>
-          <p className="text-[11px] tracking-[0.22em] text-zinc-500 uppercase">
+        <div className="space-y-3 lg:col-span-3">
+          <p className="text-[11px] font-bold tracking-[0.14em] text-[#0b1c30]/70 uppercase">
             Quick links
           </p>
-          <ul className="mt-4 space-y-2">
+          <ul className="space-y-2">
             {footerNav.map((item) => (
               <li key={item.id}>
                 <a
                   href={item.href}
-                  className="text-sm text-zinc-700 transition-colors hover:text-zinc-900"
+                  className="text-sm text-[#45464d] transition hover:text-[#0b1c30]"
                 >
                   {item.label}
                 </a>
@@ -37,11 +39,11 @@ export function MarketingFooter() {
           </ul>
         </div>
 
-        <div>
-          <p className="text-[11px] tracking-[0.22em] text-zinc-500 uppercase">
+        <div className="space-y-3 lg:col-span-5">
+          <p className="text-[11px] font-bold tracking-[0.14em] text-[#0b1c30]/70 uppercase">
             Contact
           </p>
-          <ul className="mt-4 space-y-2 text-sm text-zinc-700">
+          <ul className="space-y-2 text-sm text-[#45464d]">
             <li>{siteConfig.contact.address || "Dhaka, Bangladesh"}</li>
             {siteConfig.contact.phone ? (
               <li>
@@ -72,11 +74,11 @@ export function MarketingFooter() {
               </li>
             ) : null}
           </ul>
-          <p className="mt-6 text-xs text-zinc-500">{footerHome.licenses}</p>
+          <p className="pt-2 text-xs text-[#76777d]">{footerHome.licenses}</p>
         </div>
       </div>
 
-      <p className="mt-10 border-t border-zinc-900/8 pt-6 text-xs text-zinc-500">
+      <p className="mx-auto mt-10 max-w-6xl border-t border-[#c6c6cd]/40 pt-6 text-xs text-[#76777d]">
         {footerHome.copyright}
       </p>
     </footer>

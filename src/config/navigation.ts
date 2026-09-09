@@ -8,23 +8,21 @@ export type NavItem = {
 
 export const marketingNav: NavItem[] = [
   { id: "home", label: "Home", href: "#home" },
-  { id: "about", label: "About Us", href: "#about" },
+  { id: "about", label: "About", href: "#about" },
   { id: "services", label: "Services", href: "#services" },
   { id: "tours", label: "Tours", href: "#tours" },
   { id: "visa", label: "Visa", href: "#visa" },
   { id: "contact", label: "Contact", href: "#contact" },
 ];
 
-/** Compact pill links inside the cinematic hero. */
-export const heroNav: NavItem[] = [
+export const footerNav: NavItem[] = [
   { id: "home", label: "Home", href: "#home" },
-  { id: "about", label: "About", href: "#about" },
+  { id: "about", label: "About Us", href: "#about" },
   { id: "services", label: "Services", href: "#services" },
   { id: "tours", label: "Tours", href: "#tours" },
+  { id: "visa", label: "Visa", href: "#visa" },
   { id: "contact", label: "Contact", href: "#contact" },
 ];
-
-export const footerNav: NavItem[] = marketingNav;
 
 export function getWhatsAppHref(): string | null {
   const number = siteConfig.contact.whatsapp;

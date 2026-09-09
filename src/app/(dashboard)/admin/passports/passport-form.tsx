@@ -45,12 +45,14 @@ export function PassportForm({
   defaultValues,
   candidates,
   lockCandidate,
+  basePath = "/admin/passports",
 }: {
   mode: "create" | "edit";
   passportId?: string;
   defaultValues: PassportInput;
   candidates: CandidateOption[];
   lockCandidate?: boolean;
+  basePath?: string;
 }) {
   const [isPending, startTransition] = useTransition();
   const frontRef = useRef<HTMLInputElement>(null);
@@ -580,8 +582,8 @@ export function PassportForm({
           <Link
             href={
               mode === "edit" && passportId
-                ? `/admin/passports/${passportId}`
-                : "/admin/passports"
+                ? `${basePath}/${passportId}`
+                : basePath
             }
             className={cn(buttonVariants({ variant: "secondary" }))}
           >

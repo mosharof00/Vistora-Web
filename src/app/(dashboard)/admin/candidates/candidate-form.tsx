@@ -43,11 +43,13 @@ export function CandidateForm({
   candidateId,
   defaultValues,
   agents,
+  basePath = "/admin/candidates",
 }: {
   mode: "create" | "edit";
   candidateId?: string;
   defaultValues: CandidateInput;
   agents: AgentOption[];
+  basePath?: string;
 }) {
   const [isPending, startTransition] = useTransition();
   const form = useForm<CandidateInput>({
@@ -372,14 +374,14 @@ export function CandidateForm({
               </Button>
               <Link
                 href={
-                  mode === "edit" && candidateId
-                    ? `/admin/candidates/${candidateId}`
-                    : "/admin/candidates"
-                }
-                className={buttonVariants({ variant: "outline" })}
-              >
-                Cancel
-              </Link>
+                    mode === "edit" && candidateId
+                      ? `${basePath}/${candidateId}`
+                      : basePath
+                  }
+                  className={buttonVariants({ variant: "outline" })}
+                >
+                  Cancel
+                </Link>
             </div>
           </form>
         </Form>

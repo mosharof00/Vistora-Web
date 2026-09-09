@@ -7,8 +7,8 @@ export const brand = {
   shortName: "VISTORA",
   legalName: "Vistora Tours & Travels",
   tagline: "Explore More, Travel Beyond",
-  description:
-    "Manpower recruitment and travel support — from demand letter to deployment.",
+    description:
+    "Manpower recruitment and travel support — visas, work permits, and deployment coordination.",
 
   /** Square mark (sidebar / header). */
   logoIcon: "/brand/logo.png",

@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { requireRole } from "@/lib/auth/get-user";
+import { ROLE_HOME, type UserRole } from "@/lib/auth/roles";
 import {
   buildCandidateDocPath,
   extensionFromFileName,
@@ -26,6 +27,10 @@ function emptyToNull(value?: string) {
 function emptyDate(value?: string) {
   const v = value?.trim();
   return v ? v : null;
+}
+
+function baseFor(role: UserRole) {
+  return ROLE_HOME[role];
 }
 
 function toRow(
@@ -142,13 +147,19 @@ function revalidatePassportPaths(
   revalidatePath(`/admin/candidates/${candidateId}`);
   revalidatePath("/admin/candidates");
   revalidatePath("/admin");
+  revalidatePath("/staff/passports");
+  revalidatePath(`/staff/passports/${id}`);
+  revalidatePath(`/staff/passports/${id}/edit`);
+  revalidatePath(`/staff/candidates/${candidateId}`);
+  revalidatePath("/staff/candidates");
+  revalidatePath("/staff");
 }
 
 export async function createPassport(
   values: PassportInput,
   formData?: FormData
 ): Promise<ActionResult | void> {
-  await requireRole("admin");
+  const { user, role } = await requireRole(["admin", "staff"]);
   const parsed = passportSchema.safeParse(values);
   if (!parsed.success) {
     return { error: "Please check the form and try again." };
@@ -179,16 +190,18 @@ export async function createPassport(
   const supabase = await createClient();
   const { data: row, error } = await supabase
     .from("passports")
-    .insert(
-      toRow(data, {
+    .insert({
+      ...toRow(data, {
         scan_front_path:
           (frontUpload && "path" in frontUpload ? frontUpload.path : null) ??
           emptyToNull(data.scanFrontPath),
         scan_back_path:
           (backUpload && "path" in backUpload ? backUpload.path : null) ??
           emptyToNull(data.scanBackPath),
-      })
-    )
+      }),
+      created_by: user.id,
+      updated_by: user.id,
+    })
     .select("id")
     .single();
 
@@ -203,7 +216,7 @@ export async function createPassport(
   }
 
   revalidatePassportPaths(row.id, data.candidateId);
-  redirect(`/admin/passports/${row.id}?created=1`);
+  redirect(`${baseFor(role)}/passports/${row.id}?created=1`);
 }
 
 export async function updatePassport(
@@ -211,7 +224,7 @@ export async function updatePassport(
   values: PassportInput,
   formData?: FormData
 ): Promise<ActionResult | void> {
-  await requireRole("admin");
+  const { user, role } = await requireRole(["admin", "staff"]);
   const parsed = passportSchema.safeParse(values);
   if (!parsed.success) {
     return { error: "Please check the form and try again." };
@@ -242,16 +255,17 @@ export async function updatePassport(
   const supabase = await createClient();
   const { error } = await supabase
     .from("passports")
-    .update(
-      toRow(data, {
+    .update({
+      ...toRow(data, {
         scan_front_path:
           (frontUpload && "path" in frontUpload ? frontUpload.path : null) ??
           emptyToNull(data.scanFrontPath),
         scan_back_path:
           (backUpload && "path" in backUpload ? backUpload.path : null) ??
           emptyToNull(data.scanBackPath),
-      })
-    )
+      }),
+      updated_by: user.id,
+    })
     .eq("id", id);
 
   if (error) {
@@ -265,13 +279,13 @@ export async function updatePassport(
   }
 
   revalidatePassportPaths(id, data.candidateId);
-  redirect(`/admin/passports/${id}?updated=1`);
+  redirect(`${baseFor(role)}/passports/${id}?updated=1`);
 }
 
 export async function getPassportScanSignedUrl(
   storagePath: string
 ): Promise<{ error: string } | { url: string }> {
-  await requireRole("admin");
+  await requireRole(["admin", "staff"]);
   const supabase = await createClient();
   const { data, error } = await supabase.storage
     .from(STORAGE_BUCKETS.passports)
@@ -286,12 +300,12 @@ export async function setPassportCurrent(
   id: string,
   candidateId: string
 ): Promise<ActionResult | void> {
-  await requireRole("admin");
+  const { user } = await requireRole(["admin", "staff"]);
   await clearOtherCurrent(candidateId, id);
   const supabase = await createClient();
   const { error } = await supabase
     .from("passports")
-    .update({ is_current: true })
+    .update({ is_current: true, updated_by: user.id })
     .eq("id", id);
   if (error) return { error: error.message };
   revalidatePassportPaths(id, candidateId);

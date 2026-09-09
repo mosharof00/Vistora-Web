@@ -98,11 +98,13 @@ export const NAV_BY_ROLE: Record<UserRole, NavEntry[]> = {
   staff: [
     item("Dashboard", "/staff", "dashboard"),
     item("Candidates", "/staff/candidates", "candidates"),
+    item("Passports", "/staff/passports", "passports"),
+    item("Cases", "/staff/cases", "cases"),
     item("Job Orders", "/staff/job-orders", "orders"),
     item("Visa Batches", "/staff/visa-batches", "batches"),
-    item("Cases", "/staff/cases", "cases"),
     item("Documents", "/staff/documents", "documents"),
     item("Payments", "/staff/payments", "payments"),
+    item("Attendance", "/staff/attendance", "attendance"),
   ],
   hr: [
     item("Dashboard", "/hr", "dashboard"),

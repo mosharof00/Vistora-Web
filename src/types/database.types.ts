@@ -306,6 +306,7 @@ export type Database = {
           candidate_id: string
           case_code: string
           created_at: string
+          created_by: string | null
           deployed_at: string | null
           flight_date: string | null
           flight_number: string | null
@@ -317,6 +318,7 @@ export type Database = {
           remarks: string | null
           trade_remark: string | null
           updated_at: string
+          updated_by: string | null
           visa_batch_id: string
         }
         Insert: {
@@ -325,6 +327,7 @@ export type Database = {
           candidate_id: string
           case_code: string
           created_at?: string
+          created_by?: string | null
           deployed_at?: string | null
           flight_date?: string | null
           flight_number?: string | null
@@ -336,6 +339,7 @@ export type Database = {
           remarks?: string | null
           trade_remark?: string | null
           updated_at?: string
+          updated_by?: string | null
           visa_batch_id: string
         }
         Update: {
@@ -344,6 +348,7 @@ export type Database = {
           candidate_id?: string
           case_code?: string
           created_at?: string
+          created_by?: string | null
           deployed_at?: string | null
           flight_date?: string | null
           flight_number?: string | null
@@ -355,6 +360,7 @@ export type Database = {
           remarks?: string | null
           trade_remark?: string | null
           updated_at?: string
+          updated_by?: string | null
           visa_batch_id?: string
         }
         Relationships: [
@@ -414,6 +420,7 @@ export type Database = {
           auth_user_id: string | null
           candidate_code: string
           created_at: string
+          created_by: string | null
           date_of_birth: string | null
           email: string | null
           emergency_contact_name: string | null
@@ -435,11 +442,13 @@ export type Database = {
           source: Database["public"]["Enums"]["candidate_source"]
           status: Database["public"]["Enums"]["candidate_status"]
           updated_at: string
+          updated_by: string | null
         }
         Insert: {
           auth_user_id?: string | null
           candidate_code: string
           created_at?: string
+          created_by?: string | null
           date_of_birth?: string | null
           email?: string | null
           emergency_contact_name?: string | null
@@ -461,11 +470,13 @@ export type Database = {
           source?: Database["public"]["Enums"]["candidate_source"]
           status?: Database["public"]["Enums"]["candidate_status"]
           updated_at?: string
+          updated_by?: string | null
         }
         Update: {
           auth_user_id?: string | null
           candidate_code?: string
           created_at?: string
+          created_by?: string | null
           date_of_birth?: string | null
           email?: string | null
           emergency_contact_name?: string | null
@@ -487,6 +498,7 @@ export type Database = {
           source?: Database["public"]["Enums"]["candidate_source"]
           status?: Database["public"]["Enums"]["candidate_status"]
           updated_at?: string
+          updated_by?: string | null
         }
         Relationships: [
           {
@@ -1284,6 +1296,7 @@ export type Database = {
         Row: {
           candidate_id: string
           created_at: string
+          created_by: string | null
           date_of_birth: string | null
           emergency_contact_address: string | null
           emergency_contact_name: string | null
@@ -1316,10 +1329,12 @@ export type Database = {
           sex: string | null
           surname: string | null
           updated_at: string
+          updated_by: string | null
         }
         Insert: {
           candidate_id: string
           created_at?: string
+          created_by?: string | null
           date_of_birth?: string | null
           emergency_contact_address?: string | null
           emergency_contact_name?: string | null
@@ -1352,10 +1367,12 @@ export type Database = {
           sex?: string | null
           surname?: string | null
           updated_at?: string
+          updated_by?: string | null
         }
         Update: {
           candidate_id?: string
           created_at?: string
+          created_by?: string | null
           date_of_birth?: string | null
           emergency_contact_address?: string | null
           emergency_contact_name?: string | null
@@ -1388,6 +1405,7 @@ export type Database = {
           sex?: string | null
           surname?: string | null
           updated_at?: string
+          updated_by?: string | null
         }
         Relationships: [
           {

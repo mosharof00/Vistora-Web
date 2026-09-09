@@ -49,6 +49,7 @@ function mimeForUpload(file: File) {
 }
 function revalidateOwner(ownerType: DocumentOwnerType, ownerId: string) {
   revalidatePath("/admin/documents");
+  revalidatePath("/staff/documents");
   switch (ownerType) {
     case "employer_company":
       revalidatePath(`/admin/companies/${ownerId}`);
@@ -57,14 +58,20 @@ function revalidateOwner(ownerType: DocumentOwnerType, ownerId: string) {
     case "case":
       revalidatePath(`/admin/cases/${ownerId}`);
       revalidatePath("/admin/cases");
+      revalidatePath(`/staff/cases/${ownerId}`);
+      revalidatePath("/staff/cases");
       break;
     case "candidate":
       revalidatePath(`/admin/candidates/${ownerId}`);
       revalidatePath("/admin/candidates");
+      revalidatePath(`/staff/candidates/${ownerId}`);
+      revalidatePath("/staff/candidates");
       revalidatePath("/admin/passports");
+      revalidatePath("/staff/passports");
       break;
     case "job_order":
       revalidatePath(`/admin/job-orders/${ownerId}`);
+      revalidatePath(`/staff/job-orders/${ownerId}`);
       break;
     default:
       break;

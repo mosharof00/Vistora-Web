@@ -60,7 +60,7 @@ function revalidatePaymentPaths(candidateId?: string, id?: string) {
 export async function createCandidatePayment(
   values: CandidatePaymentFormValues
 ): Promise<ActionResult | void> {
-  await requireRole("admin");
+  const { role } = await requireRole(["admin", "staff"]);
   const parsed = candidatePaymentSchema.safeParse(values);
   if (!parsed.success) {
     return { error: "Please check the form and try again." };
@@ -78,14 +78,22 @@ export async function createCandidatePayment(
   }
 
   revalidatePaymentPaths(data.candidate_id ?? undefined, data.id);
-  redirect("/admin/payments?created=1");
+  revalidatePath("/staff/payments");
+  if (data.id) {
+    revalidatePath(`/staff/payments/${data.id}`);
+  }
+  redirect(
+    role === "staff"
+      ? `/staff/payments/${data.id}?created=1`
+      : "/admin/payments?created=1"
+  );
 }
 
 export async function updateCandidatePayment(
   id: string,
   values: CandidatePaymentFormValues
 ): Promise<ActionResult | void> {
-  await requireRole("admin");
+  const { role } = await requireRole(["admin", "staff"]);
   const parsed = candidatePaymentSchema.safeParse(values);
   if (!parsed.success) {
     return { error: "Please check the form and try again." };
@@ -102,5 +110,11 @@ export async function updateCandidatePayment(
   }
 
   revalidatePaymentPaths(parsed.data.candidateId, id);
-  redirect("/admin/payments?updated=1");
+  revalidatePath("/staff/payments");
+  revalidatePath(`/staff/payments/${id}`);
+  redirect(
+    role === "staff"
+      ? `/staff/payments/${id}?updated=1`
+      : "/admin/payments?updated=1"
+  );
 }

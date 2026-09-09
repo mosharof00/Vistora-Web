@@ -1,8 +1,8 @@
 import { CinematicHero } from "@/components/marketing/hero/cinematic-hero";
 import { ExperienceShell } from "@/components/marketing/experience-shell";
 import { FloatingContact } from "@/components/marketing/floating-contact";
-import { MarketingBoardHeader } from "@/components/marketing/marketing-board-header";
 import { MarketingFooter } from "@/components/marketing/marketing-footer";
+import { SiteHeader } from "@/components/marketing/site-header";
 import type { MarketingAccount } from "@/components/marketing/account-menu";
 import {
   AboutSection,
@@ -15,7 +15,6 @@ import {
 } from "@/components/marketing/sections/destinations-tours-visa";
 import { InquirySection } from "@/components/marketing/sections/inquiry-section";
 import {
-  GallerySection,
   HowSection,
   ReviewsSection,
   WhySection,
@@ -45,13 +44,10 @@ export default async function HomePage() {
 
   return (
     <ExperienceShell>
-      <CinematicHero account={account} />
+      <SiteHeader account={account} />
+      <CinematicHero />
 
-      <div className="relative z-10 mx-2 mt-3 overflow-hidden rounded-[1.5rem] bg-[#f3eee4] text-zinc-900 sm:mx-3 md:rounded-[1.75rem]">
-        <div className="px-2 pt-2 sm:px-3 sm:pt-3">
-          <MarketingBoardHeader account={account} />
-        </div>
-
+      <div className="relative z-10 mx-2 mt-3 overflow-hidden rounded-[1.5rem] bg-[#f8f9ff] text-[#0b1c30] sm:mx-3 md:rounded-[1.75rem]">
         <AboutSection />
         <ServicesSection />
         <DestinationsSection />
@@ -60,7 +56,6 @@ export default async function HomePage() {
         <WhySection />
         <HowSection />
         <ReviewsSection />
-        <GallerySection />
         <InquirySection />
         <MarketingFooter />
       </div>

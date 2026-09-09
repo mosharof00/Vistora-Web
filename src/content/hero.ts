@@ -23,7 +23,7 @@ export const heroChapters: HeroChapter[] = [
     index: 0,
     coords: "PARIS  /  48.8566° N",
     title: "Paris begins before you land.",
-    body: "Air tickets, visas, and work permits — arranged by Vistora before you leave the ground.",
+    body: "Visas and work permits — arranged by Vistora before you leave the ground.",
     align: "center",
     cta: { label: "Begin the descent", target: "next" },
   },
@@ -48,7 +48,7 @@ export const heroChapters: HeroChapter[] = [
     index: 3,
     kicker: "03  —  FIRST LIGHT",
     title: "Paris, revealed.",
-    body: "One partner for tickets, visas, tours, and the permit that opens the door.",
+    body: "One partner for visas, tours, and the permit that opens the door.",
     align: "right",
   },
   {

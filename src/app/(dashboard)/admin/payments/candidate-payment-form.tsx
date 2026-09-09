@@ -49,6 +49,7 @@ export function CandidatePaymentForm({
   feeSchedules,
   gateways,
   currencies,
+  basePath = "/admin/payments",
 }: {
   mode: "create" | "edit";
   paymentId?: string;
@@ -58,6 +59,7 @@ export function CandidatePaymentForm({
   feeSchedules: Option[];
   gateways: Option[];
   currencies: CurrencyOption[];
+  basePath?: string;
 }) {
   const [isPending, startTransition] = useTransition();
   const form = useForm<CandidatePaymentFormValues>({
@@ -353,7 +355,11 @@ export function CandidatePaymentForm({
                     : "Save changes"}
               </Button>
               <Link
-                href="/admin/payments"
+                href={
+                  mode === "edit" && paymentId
+                    ? `${basePath}/${paymentId}`
+                    : basePath
+                }
                 className={buttonVariants({ variant: "outline" })}
               >
                 Cancel

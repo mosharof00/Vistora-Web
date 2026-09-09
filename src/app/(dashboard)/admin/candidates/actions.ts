@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { requireRole } from "@/lib/auth/get-user";
+import { ROLE_HOME, type UserRole } from "@/lib/auth/roles";
 import { createClient } from "@/lib/supabase/server";
 import {
   candidateSchema,
@@ -15,6 +16,10 @@ type ActionResult = { error: string };
 function emptyToNull(value?: string) {
   const v = value?.trim();
   return v ? v : null;
+}
+
+function baseFor(role: UserRole) {
+  return ROLE_HOME[role];
 }
 
 function toRow(values: CandidateInput) {
@@ -44,7 +49,7 @@ function toRow(values: CandidateInput) {
 export async function createCandidate(
   values: CandidateInput
 ): Promise<ActionResult | void> {
-  await requireRole("admin");
+  const { user, role } = await requireRole(["admin", "staff"]);
   const parsed = candidateSchema.safeParse(values);
   if (!parsed.success) {
     return { error: "Please check the form and try again." };
@@ -53,7 +58,11 @@ export async function createCandidate(
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("candidates")
-    .insert(toRow(parsed.data))
+    .insert({
+      ...toRow(parsed.data),
+      created_by: user.id,
+      updated_by: user.id,
+    })
     .select("id")
     .single();
 
@@ -64,16 +73,19 @@ export async function createCandidate(
     return { error: error.message };
   }
 
+  const base = baseFor(role);
+  revalidatePath(`${base}/candidates`);
+  revalidatePath(base);
   revalidatePath("/admin/candidates");
-  revalidatePath("/admin");
-  redirect(`/admin/candidates/${data.id}?created=1`);
+  revalidatePath("/staff/candidates");
+  redirect(`${base}/candidates/${data.id}?created=1`);
 }
 
 export async function updateCandidate(
   id: string,
   values: CandidateInput
 ): Promise<ActionResult | void> {
-  await requireRole("admin");
+  const { user, role } = await requireRole(["admin", "staff"]);
   const parsed = candidateSchema.safeParse(values);
   if (!parsed.success) {
     return { error: "Please check the form and try again." };
@@ -82,7 +94,10 @@ export async function updateCandidate(
   const supabase = await createClient();
   const { error } = await supabase
     .from("candidates")
-    .update(toRow(parsed.data))
+    .update({
+      ...toRow(parsed.data),
+      updated_by: user.id,
+    })
     .eq("id", id);
 
   if (error) {
@@ -92,27 +107,30 @@ export async function updateCandidate(
     return { error: error.message };
   }
 
+  const base = baseFor(role);
+  revalidatePath(`${base}/candidates`);
+  revalidatePath(`${base}/candidates/${id}`);
+  revalidatePath(`${base}/candidates/${id}/edit`);
   revalidatePath("/admin/candidates");
-  revalidatePath(`/admin/candidates/${id}`);
-  revalidatePath(`/admin/candidates/${id}/edit`);
-  revalidatePath("/admin");
-  redirect(`/admin/candidates/${id}?updated=1`);
+  revalidatePath("/staff/candidates");
+  redirect(`${base}/candidates/${id}?updated=1`);
 }
 
 export async function setCandidateStatus(
   id: string,
   status: CandidateInput["status"]
 ): Promise<ActionResult | void> {
-  await requireRole("admin");
+  const { user } = await requireRole(["admin", "staff"]);
   const supabase = await createClient();
   const { error } = await supabase
     .from("candidates")
-    .update({ status })
+    .update({ status, updated_by: user.id })
     .eq("id", id);
 
   if (error) return { error: error.message };
 
   revalidatePath("/admin/candidates");
+  revalidatePath("/staff/candidates");
   revalidatePath(`/admin/candidates/${id}`);
-  revalidatePath("/admin");
+  revalidatePath(`/staff/candidates/${id}`);
 }

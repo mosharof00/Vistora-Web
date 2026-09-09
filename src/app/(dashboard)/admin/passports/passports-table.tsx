@@ -36,13 +36,21 @@ function isExpired(expiry: string | null) {
   return d < today;
 }
 
-export function PassportsTable({ passports }: { passports: PassportListRow[] }) {
+export function PassportsTable({
+  passports,
+  basePath = "/admin/passports",
+  candidatesBasePath = "/admin/candidates",
+}: {
+  passports: PassportListRow[];
+  basePath?: string;
+  candidatesBasePath?: string;
+}) {
   if (passports.length === 0) {
     return (
       <div className="rounded-2xl bg-card px-6 py-12 text-center shadow-sm ring-1 ring-border/60">
         <p className="text-sm text-muted-foreground">No passports yet.</p>
         <Link
-          href="/admin/passports/new"
+          href={`${basePath}/new`}
           className={cn(buttonVariants(), "mt-4")}
         >
           Add passport
@@ -75,7 +83,7 @@ export function PassportsTable({ passports }: { passports: PassportListRow[] }) 
                 >
                   <td className="px-4 py-3">
                     <Link
-                      href={`/admin/passports/${row.id}`}
+                      href={`${basePath}/${row.id}`}
                       className="font-medium tabular-nums text-primary hover:underline"
                     >
                       {row.passport_number}
@@ -88,7 +96,7 @@ export function PassportsTable({ passports }: { passports: PassportListRow[] }) 
                   <td className="px-4 py-3">
                     {row.candidate_id ? (
                       <Link
-                        href={`/admin/candidates/${row.candidate_id}`}
+                        href={`${candidatesBasePath}/${row.candidate_id}`}
                         className="text-primary hover:underline"
                       >
                         {row.candidate_code || "Candidate"}
@@ -119,7 +127,7 @@ export function PassportsTable({ passports }: { passports: PassportListRow[] }) 
                   </td>
                   <td className="px-4 py-3 text-right">
                     <Link
-                      href={`/admin/passports/${row.id}`}
+                      href={`${basePath}/${row.id}`}
                       className={cn(
                         buttonVariants({ variant: "ghost", size: "sm" })
                       )}
@@ -127,7 +135,7 @@ export function PassportsTable({ passports }: { passports: PassportListRow[] }) 
                       View
                     </Link>
                     <Link
-                      href={`/admin/passports/${row.id}/edit`}
+                      href={`${basePath}/${row.id}/edit`}
                       className={cn(
                         buttonVariants({ variant: "ghost", size: "sm" }),
                         "gap-1.5"
