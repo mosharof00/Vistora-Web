@@ -6,7 +6,7 @@ import { EmployeesTable } from "@/app/(dashboard)/admin/employees/employees-tabl
 import { EmployeesFlashToast } from "@/app/(dashboard)/admin/employees/employees-flash-toast";
 import { ListFilters } from "@/components/layout/list-filters";
 import { buttonVariants } from "@/components/ui/button";
-import { ilikeOr } from "@/lib/list-filters";
+import { ilikeOr, pickStatus } from "@/lib/list-filters";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
 import { EMPLOYEE_STATUS_OPTIONS } from "@/lib/validations/employee";
@@ -31,8 +31,9 @@ export default async function AdminEmployeesPage({
     )
     .order("created_at", { ascending: false });
 
-  if (params.status) {
-    query = query.eq("status", params.status);
+  const status = pickStatus(params.status, EMPLOYEE_STATUS_OPTIONS);
+  if (status) {
+    query = query.eq("status", status);
   }
   const searchOr = params.q
     ? ilikeOr(

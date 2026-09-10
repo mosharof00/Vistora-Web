@@ -6,7 +6,7 @@ import { CompaniesTable } from "@/app/(dashboard)/admin/companies/companies-tabl
 import { CompaniesFlashToast } from "@/app/(dashboard)/admin/companies/companies-flash-toast";
 import { ListFilters } from "@/components/layout/list-filters";
 import { buttonVariants } from "@/components/ui/button";
-import { ilikeOr, PARTY_STATUS_OPTIONS } from "@/lib/list-filters";
+import { ilikeOr, PARTY_STATUS_OPTIONS, pickStatus } from "@/lib/list-filters";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
 
@@ -28,8 +28,9 @@ export default async function AdminCompaniesPage({
     .select("*")
     .order("created_at", { ascending: false });
 
-  if (params.status) {
-    query = query.eq("status", params.status);
+  const status = pickStatus(params.status, PARTY_STATUS_OPTIONS);
+  if (status) {
+    query = query.eq("status", status);
   }
   const searchOr = params.q
     ? ilikeOr(

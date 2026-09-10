@@ -6,7 +6,7 @@ import { VisaBatchesTable } from "@/app/(dashboard)/admin/visa-batches/visa-batc
 import { VisaBatchesFlashToast } from "@/app/(dashboard)/admin/visa-batches/visa-batches-flash-toast";
 import { ListFilters } from "@/components/layout/list-filters";
 import { buttonVariants } from "@/components/ui/button";
-import { ilikeOr } from "@/lib/list-filters";
+import { ilikeOr, pickStatus } from "@/lib/list-filters";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
 import { VISA_BATCH_STATUS_OPTIONS } from "@/lib/validations/visa-batch";
@@ -31,8 +31,9 @@ export default async function AdminVisaBatchesPage({
     )
     .order("created_at", { ascending: false });
 
-  if (params.status) {
-    query = query.eq("status", params.status);
+  const status = pickStatus(params.status, VISA_BATCH_STATUS_OPTIONS);
+  if (status) {
+    query = query.eq("status", status);
   }
   const searchOr = params.q
     ? ilikeOr(["batch_code", "title", "visa_number", "pro_office"], params.q)

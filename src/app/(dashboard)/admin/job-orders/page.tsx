@@ -6,7 +6,7 @@ import { JobOrdersTable } from "@/app/(dashboard)/admin/job-orders/job-orders-ta
 import { JobOrdersFlashToast } from "@/app/(dashboard)/admin/job-orders/job-orders-flash-toast";
 import { ListFilters } from "@/components/layout/list-filters";
 import { buttonVariants } from "@/components/ui/button";
-import { ilikeOr } from "@/lib/list-filters";
+import { ilikeOr, pickStatus } from "@/lib/list-filters";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
 import { JOB_ORDER_STATUS_OPTIONS } from "@/lib/validations/job-order";
@@ -31,8 +31,9 @@ export default async function AdminJobOrdersPage({
     )
     .order("created_at", { ascending: false });
 
-  if (params.status) {
-    query = query.eq("status", params.status);
+  const status = pickStatus(params.status, JOB_ORDER_STATUS_OPTIONS);
+  if (status) {
+    query = query.eq("status", status);
   }
   const searchOr = params.q
     ? ilikeOr(["order_code", "title", "country_code"], params.q)
